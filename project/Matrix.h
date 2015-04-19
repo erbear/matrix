@@ -29,7 +29,7 @@ using namespace std;
 class Matrix
 {
     int columns, rows;
-    vector < vector < int >> matrix;
+    vector < int > matrix;
     vector < vector < int >> compressed;
     
 public:
@@ -40,7 +40,8 @@ public:
     bool isSymmetric();
     bool isTriangular();
     void compress();
-    void compressToCoat();//Schemat powłokowy
+    void coatCompression();//Schemat powłokowy
+    void shermanCompression();//Kompresja Shermana
     
     
 };

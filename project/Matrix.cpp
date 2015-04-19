@@ -36,7 +36,6 @@ void Matrix::loadMatrix()
     //Reading from file
     int columns, rows, number;
     int numberInRow;
-    vector<int> row;
     
     plik >> columns >> rows;
     
@@ -49,15 +48,13 @@ void Matrix::loadMatrix()
         
         if (plik.good()){
             cout << number;
-            row.push_back(number);
+            this->matrix.push_back(number);
         }
         else
             break;
         
         if (numberInRow == columns){
             numberInRow = 0;
-            this->matrix.push_back(row);
-            row.clear();
             cout << endl;
         }
         else
@@ -71,7 +68,7 @@ void Matrix::compress()
 {
     
 }
-void Matrix::compressToCoat()
+void Matrix::coatCompression()
 {
     vector<int> an, ia;
     
@@ -81,23 +78,23 @@ void Matrix::compressToCoat()
         
         
         for (int i2=0; i2<i+1; i2++){
-            if (this->matrix[i][i2] != 0 || startReading == true){
+            if (this->matrix[i*this->columns+i2] != 0 || startReading == true){
                 startReading = true;
-                an.push_back(this->matrix[i][i2]);
+                an.push_back(this->matrix[i*this->columns+i2]);
             }
         }
         ia.push_back(static_cast<int>(an.size()));
     }
     
 //    check
-//    
-//    for (int i=0; i<an.size(); i++) {
-//        cout << an[i] << " ";
-//    }
-//    cout << endl;
-//    for (int i=0; i<ia.size(); i++) {
-//        cout << ia[i] << " ";
-//    }
+    
+    for (int i=0; i<an.size(); i++) {
+        cout << an[i] << " ";
+    }
+    cout << endl;
+    for (int i=0; i<ia.size(); i++) {
+        cout << ia[i] << " ";
+    }
     
 }
 
