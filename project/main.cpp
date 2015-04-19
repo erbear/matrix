@@ -12,5 +12,6 @@ int main(int argc, const char * argv[]) {
     
     Matrix m;
     m.loadMatrix();
+    m.compressToCoat();
     
 }

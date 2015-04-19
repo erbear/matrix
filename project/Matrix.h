@@ -28,8 +28,9 @@ using namespace std;
 
 class Matrix
 {
-    int c, r;
-    vector < vector < int >> martix;
+    int columns, rows;
+    vector < vector < int >> matrix;
+    vector < vector < int >> compressed;
     
 public:
     Matrix();
@@ -38,7 +39,8 @@ public:
     void loadMatrix();
     bool isSymmetric();
     bool isTriangular();
-    
+    void compress();
+    void compressToCoat();//Schemat powłokowy
     
     
 };
