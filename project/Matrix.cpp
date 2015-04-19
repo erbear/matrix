@@ -86,18 +86,23 @@ void Matrix::coatCompression()
         ia.push_back(static_cast<int>(an.size()));
     }
     
-//    check
+    this->compressed.push_back(an);
+    this->compressed.push_back(ia);
     
-    for (int i=0; i<an.size(); i++) {
-        cout << an[i] << " ";
-    }
-    cout << endl;
-    for (int i=0; i<ia.size(); i++) {
-        cout << ia[i] << " ";
-    }
+//    check
+//    
+//    for (int i=0; i<an.size(); i++) {
+//        cout << an[i] << " ";
+//    }
+//    cout << endl;
+//    for (int i=0; i<ia.size(); i++) {
+//        cout << ia[i] << " ";
+//    }
     
 }
-
+void Matrix::shermanCompression(){
+    
+}
 
 bool Matrix::isSymmetric()
 {
