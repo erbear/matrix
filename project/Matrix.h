@@ -8,6 +8,8 @@
 
 #include <vector>
 
+using namespace std;
+
 //Potrzebuje:
 
 //wczytanie/wygenerowanie macierzy
@@ -24,8 +26,18 @@
 
 
 
-class Martix
+class Matrix
 {
     int c, r;
+    vector < vector < int >> martix;
+    
+    void Martix();
+    
+    void generateMatrix();
+    void loadMatrix();
+    bool isSymmetric();
+    bool isTriangular();
+    
+    
     
 };

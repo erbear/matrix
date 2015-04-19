@@ -7,3 +7,28 @@
 //
 
 #include "Matrix.h"
+
+void Matrix::Martix()
+{
+    
+}
+
+void Matrix::generateMatrix()
+{
+    
+}
+
+void Matrix::loadMatrix()
+{
+    
+}
+
+bool Matrix::isSymmetric()
+{
+    return true;
+}
+
+bool Matrix::isTriangular()
+{
+    return true;
+}
