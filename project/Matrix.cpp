@@ -7,10 +7,14 @@
 //
 
 #include "Matrix.h"
+#include <fstream>
+#include <iostream>
 
-void Matrix::Martix()
+using namespace std;
+
+Matrix::Matrix()
 {
-    
+    return;
 }
 
 void Matrix::generateMatrix()
@@ -20,6 +24,38 @@ void Matrix::generateMatrix()
 
 void Matrix::loadMatrix()
 {
+    //opening file
+    ifstream plik;
+    
+    plik.open("matrix.txt");
+    
+    if (!plik.good())
+        return;
+    
+    
+    //Reading from file
+    int columns, rows, liczba;
+    int numberInRow;
+    
+    plik >> columns >> rows;
+    
+    while (true){
+        numberInRow++;
+        plik >> liczba;
+        
+        if (plik.good())
+            cout << liczba;
+        else
+            break;
+        
+        if (numberInRow == columns){
+            numberInRow = 0;
+            cout << endl;
+        }
+        else
+            cout << " ";
+        
+    }
     
 }
 

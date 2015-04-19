@@ -31,7 +31,8 @@ class Matrix
     int c, r;
     vector < vector < int >> martix;
     
-    void Martix();
+public:
+    Matrix();
     
     void generateMatrix();
     void loadMatrix();
