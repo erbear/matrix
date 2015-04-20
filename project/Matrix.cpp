@@ -27,7 +27,7 @@ void Matrix::loadMatrix()
     //opening file
     ifstream plik;
     
-    plik.open("matrix.txt");
+    plik.open("sherman.txt");
     
     if (!plik.good())
         return;
@@ -101,7 +101,68 @@ void Matrix::coatCompression()
     
 }
 void Matrix::shermanCompression(){
+    vector<int> ad, an, ia, ja, ij, jaSlice;
+    int iaCounter = 1;
     
+    ia.push_back(iaCounter);//start from diagonal first element
+    
+    for (int i = 0; i<this->rows; i++)
+    {
+        for (int i2 = i; i2<this->columns; i2++) {
+            int element = this->matrix[i*this->columns+i2];
+            if (i2 == i)
+                ad.push_back(element);
+            else if (element != 0){
+                an.push_back(element);
+                jaSlice.push_back(i2+1);
+                iaCounter++;
+            }
+        }
+        int position = this->checkReccurance(ja, jaSlice);
+        
+        if (position == -1){
+            ij.push_back(static_cast<int>(ja.size())+1);
+            ja.insert(ja.end(), jaSlice.begin(), jaSlice.end());
+        } else
+            ij.push_back(position+1);
+        jaSlice.clear();
+        ia.push_back(iaCounter);
+    }
+    
+    for (int i=0; i<ad.size(); i++) {
+        cout << ad[i] << " ";
+    }
+    cout << endl;
+    for (int i=0; i<an.size(); i++) {
+        cout << an[i] << " ";
+    }
+    cout << endl;
+    for (int i=0; i<ia.size(); i++) {
+        cout << ia[i] << " ";
+    }
+    cout << endl;
+    for (int i=0; i<ja.size(); i++) {
+        cout << ja[i] << " ";
+    }
+    cout << endl;
+    for (int i=0; i<ij.size(); i++) {
+        cout << ij[i] << " ";
+    }
+}
+int Matrix::checkReccurance(vector<int>& cake, vector<int>& slice){
+    int numberOfPasses = 0,
+        position = -1;
+    for (int i = 0; i<cake.size(); i++){
+        if (cake[i] == slice[numberOfPasses] && numberOfPasses < slice.size())
+            numberOfPasses++;
+        else {
+            numberOfPasses = 0;
+            position = i+1;
+        }
+        if (numberOfPasses == slice.size())
+            return position;
+    }
+    return -1;
 }
 
 bool Matrix::isSymmetric()

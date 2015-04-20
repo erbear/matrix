@@ -8,10 +8,14 @@
 
 #include <iostream>
 #include "Matrix.h"
+
+using namespace std;
 int main(int argc, const char * argv[]) {
     
     Matrix m;
+    vector<int> one, two;
+    
     m.loadMatrix();
-    m.coatCompression();
+    m.shermanCompression();
     
 }

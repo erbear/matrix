@@ -42,6 +42,6 @@ public:
     void compress();
     void coatCompression();//Schemat powłokowy
     void shermanCompression();//Kompresja Shermana
-    
+    int checkReccurance(vector<int>&, vector<int>&);
     
 };
