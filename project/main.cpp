@@ -16,6 +16,6 @@ int main(int argc, const char * argv[]) {
     vector<int> one, two;
     
     m.loadMatrix();
-    m.shermanCompression();
+    m.diagonalCompression();
     
 }
