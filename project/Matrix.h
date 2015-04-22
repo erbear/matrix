@@ -41,6 +41,7 @@ public:
     bool isTriangular();
     void compress();
     void coatCompression();//Schemat powłokowy
+    void diagonalUnzip();
     void diagonalCompression();//Kompresja Shermana
     
 };

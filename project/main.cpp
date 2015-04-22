@@ -17,5 +17,6 @@ int main(int argc, const char * argv[]) {
     
     m.loadMatrix();
     m.diagonalCompression();
+    m.diagonalUnzip();
     
 }

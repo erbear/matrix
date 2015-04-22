@@ -137,6 +137,38 @@ void Matrix::diagonalCompression()
 //        cout << endl;
 //    }
 }
+void Matrix::diagonalUnzip(){
+    this->matrix.clear();
+    this->rows = static_cast<int>(this->compressed.size());
+    this->columns = this->rows;
+    for (int i=0; i<this->compressed.size(); i++) {
+        size_t rowSize = this->compressed[i].size() - 1;
+        int n = static_cast<int>(i-rowSize);
+        //zeros on front
+        for (int i2=0; i2<n; i2++) {
+            this->matrix.push_back(0);
+        }
+        for (int i2=0; i2<rowSize+1; i2++) {
+            if (rowSize>i && i2<=i){
+                this->matrix.push_back(this->compressed[i][rowSize-i+i2]);
+            }else if (i2<=i){
+                this->matrix.push_back(this->compressed[i][i2]);
+            }
+                
+        }
+        //zeros on back
+        for (int i2=i; i2<this->columns-1; i2++) {
+            this->matrix.push_back(0);
+        }
+    }
+    
+//    check
+//    for (int i = 1; i<=this->matrix.size(); i++) {
+//        cout << this->matrix[i-1];
+//        if (i%this->rows == 0 )
+//            cout << endl;
+//    }
+}
 
 bool Matrix::isSymmetric()
 {
