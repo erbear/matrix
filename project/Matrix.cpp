@@ -112,7 +112,7 @@ void Matrix::diagonalCompression()
 //    }
 }
 void Matrix::diagonalUnzip(){
-    this->matrix.clear();
+    this->checkMatrix.clear();
     this->rows = static_cast<int>(this->compressed.size());
     this->columns = this->rows;
     for (int i=0; i<this->compressed.size(); i++) {
@@ -120,36 +120,36 @@ void Matrix::diagonalUnzip(){
         int n = static_cast<int>(i-rowSize);
         //zeros on front
         for (int i2=0; i2<n; i2++) {
-            this->matrix.push_back(0);
+            this->checkMatrix.push_back(0);
         }
         for (int i2=0; i2<rowSize+1; i2++) {
-            int column = static_cast<int>(this->matrix.size() - i * this->columns);
+            int column = static_cast<int>(this->checkMatrix.size() - i * this->columns);
             if (rowSize>i && i2<=i){
-                this->matrix.push_back(this->compressed[i][rowSize-i+i2]);
-                this->matrix[this->rows*column+i] = this->compressed[i][rowSize-i+i2];
+                this->checkMatrix.push_back(this->compressed[i][rowSize-i+i2]);
+                this->checkMatrix[this->rows*column+i] = this->compressed[i][rowSize-i+i2];
                 
             }else if (i2<=i){
-                this->matrix.push_back(this->compressed[i][i2]);
-                this->matrix[this->rows*column+i] = this->compressed[i][i2];
+                this->checkMatrix.push_back(this->compressed[i][i2]);
+                this->checkMatrix[this->rows*column+i] = this->compressed[i][i2];
             }
                 
         }
         //zeros on back
         for (int i2=i; i2<this->columns-1; i2++) {
-            this->matrix.push_back(0);
+            this->checkMatrix.push_back(0);
         }
     }
     
 //    check
-    for (int i = 1; i<=this->matrix.size(); i++) {
-        cout << this->matrix[i-1];
-        cout << " ";
-        if (i%this->rows == 0 )
-            cout << endl;
-    }
+//    for (int i = 1; i<=this->matrix.size(); i++) {
+//        cout << this->matrix[i-1];
+//        cout << " ";
+//        if (i%this->rows == 0 )
+//            cout << endl;
+//    }
 }
 void Matrix::coatUnzip(){
-    this->matrix.clear();
+    this->checkMatrix.clear();
     this->rows = static_cast<int>(this->compressed[1].size());
     int nextStepSize = 0,
         position = 0;
@@ -157,26 +157,26 @@ void Matrix::coatUnzip(){
         nextStepSize = this->compressed[1][i] - nextStepSize;
         
         for (int i2 = 0; i2<i-nextStepSize+1; i2++) {
-            this->matrix.push_back(0);
+            this->checkMatrix.push_back(0);
         }
         for (int i2 = position; i2<position + nextStepSize; i2++){
-            this->matrix.push_back(this->compressed[0][i2]);
-            int column = static_cast<int>(this->matrix.size() - i * this->columns -1);
-            this->matrix[this->rows*column+i] = this->compressed[0][i2];
+            this->checkMatrix.push_back(this->compressed[0][i2]);
+            int column = static_cast<int>(this->checkMatrix.size() - i * this->columns -1);
+            this->checkMatrix[this->rows*column+i] = this->compressed[0][i2];
         }
         for (int i2=0; i2<this->columns-i-1; i2++) {
-            this->matrix.push_back(0);
+            this->checkMatrix.push_back(0);
         }
         position = position + nextStepSize;
         nextStepSize = this->compressed[1][i];
     }
 
-    for (int i = 1; i<=this->matrix.size(); i++) {
-        cout << this->matrix[i-1];
-        cout << " ";
-        if (i%this->rows == 0 )
-            cout << endl;
-    }
+//    for (int i = 1; i<=this->matrix.size(); i++) {
+//        cout << this->matrix[i-1];
+//        cout << " ";
+//        if (i%this->rows == 0 )
+//            cout << endl;
+//    }
 }
 
 void Matrix::modifiedSparseCompression(){
