@@ -183,6 +183,9 @@ void Matrix::coatUnzip(){
         }
         for (int i2 = position; i2<position + nextStepSize; i2++){
             this->matrix.push_back(this->compressed[0][i2]);
+            int column = this->matrix.size() - i * this->columns -1;
+            this->matrix[this->rows*column+i] = this->compressed[0][i2];
+            
         }
         for (int i2=0; i2<this->columns-i-1; i2++) {
             this->matrix.push_back(0);
