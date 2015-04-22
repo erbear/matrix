@@ -16,7 +16,8 @@ int main(int argc, const char * argv[]) {
     vector<int> one, two;
     
     m.loadMatrix();
-    m.diagonalCompression();
-    m.diagonalUnzip();
+    m.coatCompression();
+    cout << endl;
+    m.coatUnzip();
     
 }
