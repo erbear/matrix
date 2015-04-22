@@ -149,10 +149,14 @@ void Matrix::diagonalUnzip(){
             this->matrix.push_back(0);
         }
         for (int i2=0; i2<rowSize+1; i2++) {
+            int column = static_cast<int>(this->matrix.size() - i * this->columns);
             if (rowSize>i && i2<=i){
                 this->matrix.push_back(this->compressed[i][rowSize-i+i2]);
+                this->matrix[this->rows*column+i] = this->compressed[i][rowSize-i+i2];
+                
             }else if (i2<=i){
                 this->matrix.push_back(this->compressed[i][i2]);
+                this->matrix[this->rows*column+i] = this->compressed[i][i2];
             }
                 
         }
@@ -172,7 +176,7 @@ void Matrix::diagonalUnzip(){
 }
 void Matrix::coatUnzip(){
     this->matrix.clear();
-    this->rows = this->compressed[1].size();
+    this->rows = static_cast<int>(this->compressed[1].size());
     int nextStepSize = 0,
         position = 0;
     for (int i=0; i<this->rows; i++){
@@ -183,9 +187,8 @@ void Matrix::coatUnzip(){
         }
         for (int i2 = position; i2<position + nextStepSize; i2++){
             this->matrix.push_back(this->compressed[0][i2]);
-            int column = this->matrix.size() - i * this->columns -1;
+            int column = static_cast<int>(this->matrix.size() - i * this->columns -1);
             this->matrix[this->rows*column+i] = this->compressed[0][i2];
-            
         }
         for (int i2=0; i2<this->columns-i-1; i2++) {
             this->matrix.push_back(0);
