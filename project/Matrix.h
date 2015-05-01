@@ -8,8 +8,8 @@ class Matrix {
     int columns, rows;
     vector < double > matrix;
     vector < double > checkMatrix;
-    vector < double > vec;
-    vector < double > vecResult;
+    vector < double > vec; // wektor do wektora :)
+    vector < double > vecResult; // wynik mnozenia 
     vector <double> AN, IN, JA;  // wektory na łapanie formatow kompresji
     vector < vector < int > > compressed;
 
