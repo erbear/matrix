@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <ctime>
 
 using namespace std;
 
@@ -42,6 +43,10 @@ void Matrix::loadMatrix(char * s) {
     }
 }
 
+
+
+
+
 void Matrix::coatCompression()
 {
     vector<int> an, ia;
@@ -72,7 +77,7 @@ void Matrix::coatCompression()
 //    for (int i=0; i<ia.size(); i++) {
 //        cout << ia[i] << " ";
 //    }
-
+    coatUnzip();
 }
 void Matrix::diagonalCompression()
 {
@@ -110,44 +115,81 @@ void Matrix::diagonalCompression()
 //        }
 //        cout << endl;
 //    }
+    diagonalUnzip();
 }
-
-void Matrix::modifiedSparseCompression(){
-    vector <int> AN, IN, JA, IN2;
-
-    for (int i = 0; i<this->rows; i++){
-        for (int i2=0; i2<this->columns; i2++){
-            int currentNumber = this->matrix[i*this->columns+i2];
-            if (currentNumber != 0) {
-                AN.push_back(currentNumber);
-                IN.push_back(i);
-                JA.push_back(i2);
-            }
+void Matrix::diagonalUnzip(){
+    this->checkMatrix.clear();
+    this->rows = static_cast<int>(this->compressed.size());
+    this->columns = this->rows;
+    for (int i=0; i<this->compressed.size(); i++) {
+        size_t rowSize = this->compressed[i].size() - 1;
+        int n = static_cast<int>(i-rowSize);
+        //zeros on front
+        for (int i2=0; i2<n; i2++) {
+            this->checkMatrix.push_back(0);
         }
-    }
+        for (int i2=0; i2<rowSize+1; i2++) {
+            int column = static_cast<int>(this->checkMatrix.size() - i * this->columns);
+            if (rowSize>i && i2<=i){
+                this->checkMatrix.push_back(this->compressed[i][rowSize-i+i2]);
+                this->checkMatrix[this->rows*column+i] = this->compressed[i][rowSize-i+i2];
 
-    sort( IN.begin(), IN.end() );
-    IN.erase(unique(IN.begin(), IN.end()), IN.end());
-
-    makeEmptyCheckMatrix();
-    int inIndex = 0, jaIndex = 0, anIndex = 0;
-
-    for (int i = 0; i<this->rows; i++){
-        for (int i2=0; i2<this->columns; i2++){
-            if((i == IN[inIndex]) && (i2 == JA[jaIndex])){
-                checkMatrix[i*this->columns+i2]=AN[anIndex];
-                jaIndex++;
-                anIndex++;
+            }else if (i2<=i){
+                this->checkMatrix.push_back(this->compressed[i][i2]);
+                this->checkMatrix[this->rows*column+i] = this->compressed[i][i2];
             }
-            if (i2 == this->columns - 1 && i == IN[inIndex])
-                inIndex++;
+
+        }
+        //zeros on back
+        for (int i2=i; i2<this->columns-1; i2++) {
+            this->checkMatrix.push_back(0);
         }
     }
     checkTwoMatrices();
+//    check
+//    for (int i = 1; i<=this->matrix.size(); i++) {
+//        cout << this->matrix[i-1];
+
+//        cout << " ";
+//        if (i%this->rows == 0 )
+//            cout << endl;
+//    }
 }
+void Matrix::coatUnzip(){
+    this->checkMatrix.clear();
+    this->rows = static_cast<int>(this->compressed[1].size());
+    int nextStepSize = 0,
+        position = 0;
+    for (int i=0; i<this->rows; i++){
+        nextStepSize = this->compressed[1][i] - nextStepSize;
+
+        for (int i2 = 0; i2<i-nextStepSize+1; i2++) {
+            this->checkMatrix.push_back(0);
+        }
+        for (int i2 = position; i2<position + nextStepSize; i2++){
+            this->checkMatrix.push_back(this->compressed[0][i2]);
+            int column = static_cast<int>(this->checkMatrix.size() - i * this->columns -1);
+            this->checkMatrix[this->rows*column+i] = this->compressed[0][i2];
+        }
+        for (int i2=0; i2<this->columns-i-1; i2++) {
+            this->checkMatrix.push_back(0);
+        }
+        position = position + nextStepSize;
+        nextStepSize = this->compressed[1][i];
+    }
+
+//    for (int i = 1; i<=this->matrix.size(); i++) {
+//        cout << this->matrix[i-1];
+//        cout << " ";
+//        if (i%this->rows == 0 )
+//            cout << endl;
+//    }
+    checkTwoMatrices();
+}
+
 
 void Matrix::coordinatesCompression(){
-    vector <int> AN, IN, JA;
+
 
     for (int i = 0; i<this->rows; i++){
         for (int i2=0; i2<this->columns; i2++){
@@ -173,7 +215,7 @@ void Matrix::coordinatesCompression(){
             }
         }
     }
-    checkTwoMatrices();
+    //checkTwoMatrices();
 }
 
 void Matrix::makeEmptyCheckMatrix(){
@@ -199,5 +241,102 @@ void Matrix::checkTwoMatrices() const {
     }
     else {
         cout<<"Macierze roznia sie w "<<count<<" miejscach!";
+    }
+}
+
+// new code
+void Matrix::generateNewVector(){
+    vec.clear();
+    double n = 0;
+    srand( time( NULL ) );
+
+    for (int i = 0; i < this->columns; i++){
+
+        n =( rand() /( static_cast < double >( RAND_MAX ) + 1 ) ) *(10.5 - 5.25 ) - 1.25;
+        vec.push_back(n);
+    }
+    this->saveVector();
+}
+
+void Matrix::readVector(char * s){ // na probe tekstowy wektor
+    fstream plik;
+    vec.clear();
+    double number = 0.0;
+
+    plik.open( "vecto.txt", std::ios::in);
+    if( plik.good() == true ){
+        for (int i = 0; i < this->columns; i++){
+            plik >> number;
+            vec.push_back(number);
+            number = 0;
+        }
+        plik.close();
+    }
+}
+
+void Matrix::saveVector(){
+    fstream plik;
+
+    plik.open( "vecto.txt", std::ios::out);
+    if( plik.good() == true ){
+        for (int i = 0; i < this->columns; i++){
+            plik << vec[i]<<" "<<endl;
+        }
+        plik.close();
+    }
+}
+
+void Matrix::multiplicationCoordinatesCompression(){
+    for (int i = 0; i < this->rows; i++ ) {
+        vecResult.push_back(0.0);
+    }
+
+    for (int i = 0; i < AN.size(); i++){
+        vecResult[IN[i]] += AN[i] * vec[JA[i]];
+    }
+}
+
+void Matrix::modifiedSparseCompression(){
+
+    int theBiggestProblemWithCRS = 0;
+
+    for (int i = 0; i<this->rows; i++){
+        for (int i2=0; i2<this->columns; i2++){
+            int currentNumber = this->matrix[i*this->columns+i2];
+            if (currentNumber != 0) {
+                AN.push_back(currentNumber);
+                JA.push_back(i2);
+                theBiggestProblemWithCRS++;
+                if(theBiggestProblemWithCRS == 1)
+                    IN.push_back(i);
+            }
+        }
+        if (theBiggestProblemWithCRS>0)
+            IN.push_back(theBiggestProblemWithCRS);
+    }
+    IN[IN.size()-1]=AN.size();
+
+    makeEmptyCheckMatrix();
+    int inIndex = 0, jaIndex = 0, anIndex = 0;
+
+    for (int i = 0; i<this->rows; i++){
+        for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
+            if((i == IN[inIndex]) && (jj == JA[jaIndex])){
+                checkMatrix[i*this->columns+jj]=AN[anIndex];
+                jaIndex++;
+                anIndex++;
+            }
+        }
+    }
+   // checkTwoMatrices();
+}
+
+void Matrix::multiplicationModifiedSparseCompression(){
+    for (int i = 0; i<this->rows; i++ ){
+        vecResult.push_back(0.0);
+        for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
+            int j = JA[jj];
+            vecResult[i] += AN[jj] * vec[j];
+        }
     }
 }

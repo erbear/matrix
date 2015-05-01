@@ -19,7 +19,7 @@ char * Menu(){
         break;
         case 2: st = "matrix2.txt";
         break;
-        case 3: st = "matrix.txt";
+        case 3: st = "matrix3.txt";
         break;
         case 4: st = "matrix.txt";
         break;
@@ -31,15 +31,80 @@ char * Menu(){
     return st;
 }
 
+char * menuVector() {
+    int n;
+    char * vt;
+    cout<<"Wybierz wektor do mnozenia"<<endl;
+        cout<<"1. Wektor 1"<<endl;
+        cout<<"2. Wektor 2"<<endl;
+    cin>>n;
+
+    switch(n){
+        case 1: vt = "vecto.txt";
+        break;
+        case 2: vt = "vector.txt";
+        break;
+        default: vt = "vector.txt";
+        break;
+    }
+    return vt;
+}
+/*
+char * menuVector2(){
+    char * s;
+
+    cout<<"\n Podaj nazwe wektora do zapisu: "<<endl;
+    cin>>s;
+
+    return s;
+
+}
+*/
+
 int main(int argc, const char * argv[]) {
 
-    int n = 0;
-    char * st = Menu();
+    int n = 0, k = 0;
+    //char * st = Menu();
+    char * vt;
+    char * vt2;
     Matrix m;
 
-    m.loadMatrix(st);
+    //m.loadMatrix(st);
+    m.loadMatrix("matrix2.txt");
 
-    cout<<"Wybierz metode do formatowania"<<endl;
+    m.generateNewVector();
+
+    m.modifiedSparseCompression();
+
+    m.multiplicationModifiedSparseCompression();
+
+
+
+    //m.coordinatesCompression();
+
+    //m.multiplicationCoordinatesCompression();
+
+    /*cout<<"Wybierz wektor do mnozenia"<<endl;
+        cout<<"1. Wygeneruj nowy wektor"<<endl;
+        cout<<"2. Wczytaj utworzony wektor"<<endl;
+    cin>>k;
+
+    switch(k){
+        case 1:
+            //vt2 = menuVector2();
+            m.generateNewVector();
+        break;
+        case 2:
+            vt = menuVector();
+            m.readVector(vt);
+        break;
+        default:
+            vt = menuVector();
+            m.readVector(vt);
+        break;
+    }
+/*
+    cout<<"\nWybierz metode do formatowania"<<endl;
         cout<<"1. Metoda Wspolrzednych"<<endl;
         cout<<"2. Metoda Diagonalna"<<endl;
         cout<<"3. Metoda Rozrzedzona wierszowa"<<endl;
@@ -58,4 +123,6 @@ int main(int argc, const char * argv[]) {
         default: m.coordinatesCompression();
         break;
     }
+
+    */
 }
