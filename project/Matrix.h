@@ -39,8 +39,7 @@ public:
     void multiplicationModifiedSparseCompression();
     void checkMemory();
 
-    void readFromMtx();
     void multiplayDiagonal();
     void multiplayCoat();
-
+    void readFromMtx();
 };
