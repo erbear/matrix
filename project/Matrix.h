@@ -3,38 +3,37 @@
 
 using namespace std;
 
-
 class Matrix {
     int columns, rows;
     vector < double > matrix;
     vector < double > checkMatrix;
-    vector < double > vec;
-    vector < double > vecResult;
-    vector <double> AN, IN, JA;  // wektory na łapanie formatow kompresji
+    vector < double > vec; // wygenerowany wektor
+    vector < double > vecResult; // wektor do wyniku mnozenia
+    vector <double> AN; // AN - wartosci, IN - wiersze, JA - kolumny
+    vector <int> JA, IN;  // wektory na łapanie formatow kompresji
     vector < vector < int > > compressed;
 
 public:
     Matrix(){};
 
-    void generateMatrix();
-    void loadMatrix();
-    bool isSymmetric();
-    bool isTriangular();
-    void compress();
-    void coatCompression();//Schemat powłokowy
+    void coatCompression();
     void coatUnzip();
     void diagonalUnzip();
-    void loadMatrix(char *s);
-    void diagonalCompression();//Kompresja Shermana
+    void diagonalCompression();
     void coordinatesCompression();
     void modifiedSparseCompression();
+    void coordinatesCompressionUnzip();
+
+    void readFromMtx();
+    void loadMatrix(char *s);
     void checkTwoMatrices() const;
     void makeEmptyCheckMatrix();
 
     void generateNewVector();
-    void saveVector();
+    void saveVector(char * s, vector <double> &v) const;
     void readVector(char *s);
 
     void multiplicationCoordinatesCompression();
     void multiplicationModifiedSparseCompression();
+    void checkMemory();
 };

@@ -7,6 +7,51 @@
 
 using namespace std;
 
+void Matrix::readFromMtx(){
+    // Open the file:
+    ifstream plik;
+    plik.open("can__161.mtx");
+    // Declare variables:
+    int M, N, L;
+
+    // Ignore headers and comments:
+    while (plik.peek() == '%') plik.ignore(2048, '\n');
+
+    // Read defining parameters:
+    plik >> M >> N >> L;
+
+//    cout << M << " " << N << " " << L << " ";
+
+    // Create your matrix:
+    vector<double> tempMatrix(M*N);			     // Creates a pointer to the array
+
+    for (int i = 0; i<M*N; i++){
+        tempMatrix.push_back(0);
+    }
+
+    // Read the data
+    for (int l = 0; l < L; l++)
+    {
+        int m, n;
+        int data;
+        plik >> m >> n >> data;
+        tempMatrix[(m-1) + (n-1)*M] = data;
+    }
+
+    plik.close();
+
+//    check
+//    for (int i = 1; i<M*N+1; i++) {
+//        cout << matrix[i-1]<< " ";
+//        if (i%M == 0)
+//            cout << endl;
+//    }
+
+    this->columns = M;
+    this->rows = N;
+    this->matrix = tempMatrix;
+}
+
 void Matrix::loadMatrix(char * s) {
     //opening file
     ifstream plik;
@@ -43,10 +88,6 @@ void Matrix::loadMatrix(char * s) {
     }
 }
 
-
-
-
-
 void Matrix::coatCompression()
 {
     vector<int> an, ia;
@@ -77,8 +118,8 @@ void Matrix::coatCompression()
 //    for (int i=0; i<ia.size(); i++) {
 //        cout << ia[i] << " ";
 //    }
-    coatUnzip();
 }
+
 void Matrix::diagonalCompression()
 {
     int size = 0;
@@ -115,8 +156,8 @@ void Matrix::diagonalCompression()
 //        }
 //        cout << endl;
 //    }
-    diagonalUnzip();
 }
+
 void Matrix::diagonalUnzip(){
     this->checkMatrix.clear();
     this->rows = static_cast<int>(this->compressed.size());
@@ -190,7 +231,6 @@ void Matrix::coatUnzip(){
 
 void Matrix::coordinatesCompression(){
 
-
     for (int i = 0; i<this->rows; i++){
         for (int i2=0; i2<this->columns; i2++){
             int currentNumber = this->matrix[i*this->columns+i2];
@@ -201,21 +241,6 @@ void Matrix::coordinatesCompression(){
             }
         }
     }
-
-    makeEmptyCheckMatrix();
-    int inIndex = 0, jaIndex = 0, anIndex = 0;
-
-    for (int i = 0; i<this->rows; i++){
-        for (int i2=0; i2<this->columns; i2++){
-            if((i == IN[inIndex]) && (i2 == JA[jaIndex])){
-                checkMatrix[i*this->columns+i2]=AN[anIndex];
-                inIndex++;
-                jaIndex++;
-                anIndex++;
-            }
-        }
-    }
-    //checkTwoMatrices();
 }
 
 void Matrix::makeEmptyCheckMatrix(){
@@ -244,18 +269,17 @@ void Matrix::checkTwoMatrices() const {
     }
 }
 
-// new code
 void Matrix::generateNewVector(){
     vec.clear();
     double n = 0;
     srand( time( NULL ) );
 
     for (int i = 0; i < this->columns; i++){
-
+        //n = 1;
         n =( rand() /( static_cast < double >( RAND_MAX ) + 1 ) ) *(10.5 - 5.25 ) - 1.25;
         vec.push_back(n);
     }
-    this->saveVector();
+    this->saveVector("new_vector.txt", vec);
 }
 
 void Matrix::readVector(char * s){ // na probe tekstowy wektor
@@ -263,7 +287,7 @@ void Matrix::readVector(char * s){ // na probe tekstowy wektor
     vec.clear();
     double number = 0.0;
 
-    plik.open( "vecto.txt", std::ios::in);
+    plik.open( "new_vector.txt", std::ios::in);
     if( plik.good() == true ){
         for (int i = 0; i < this->columns; i++){
             plik >> number;
@@ -274,13 +298,13 @@ void Matrix::readVector(char * s){ // na probe tekstowy wektor
     }
 }
 
-void Matrix::saveVector(){
+void Matrix::saveVector(char * s, vector <double> &v) const{
     fstream plik;
 
-    plik.open( "vecto.txt", std::ios::out);
+    plik.open( s, std::ios::out);
     if( plik.good() == true ){
         for (int i = 0; i < this->columns; i++){
-            plik << vec[i]<<" "<<endl;
+            plik << v[i]<<" "<<endl;
         }
         plik.close();
     }
@@ -292,8 +316,10 @@ void Matrix::multiplicationCoordinatesCompression(){
     }
 
     for (int i = 0; i < AN.size(); i++){
-        vecResult[IN[i]] += AN[i] * vec[JA[i]];
+        vecResult[IN[i]] += (AN[i] * vec[JA[i]])/100;
     }
+
+    this->saveVector("result_vector_coo.txt", vecResult);
 }
 
 void Matrix::modifiedSparseCompression(){
@@ -315,20 +341,6 @@ void Matrix::modifiedSparseCompression(){
             IN.push_back(theBiggestProblemWithCRS);
     }
     IN[IN.size()-1]=AN.size();
-
-    makeEmptyCheckMatrix();
-    int inIndex = 0, jaIndex = 0, anIndex = 0;
-
-    for (int i = 0; i<this->rows; i++){
-        for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
-            if((i == IN[inIndex]) && (jj == JA[jaIndex])){
-                checkMatrix[i*this->columns+jj]=AN[anIndex];
-                jaIndex++;
-                anIndex++;
-            }
-        }
-    }
-   // checkTwoMatrices();
 }
 
 void Matrix::multiplicationModifiedSparseCompression(){
@@ -336,7 +348,38 @@ void Matrix::multiplicationModifiedSparseCompression(){
         vecResult.push_back(0.0);
         for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
             int j = JA[jj];
-            vecResult[i] += AN[jj] * vec[j];
+            vecResult[i] += (AN[jj] * vec[j])/100;
         }
     }
+    this->saveVector("result_vector_crs.txt", vecResult);
+}
+
+void Matrix::coordinatesCompressionUnzip(){
+    makeEmptyCheckMatrix();
+
+    int inIndex = 0, jaIndex = 0, anIndex = 0;
+
+    for (int i = 0; i<this->rows; i++){
+        for (int i2=0; i2<this->columns; i2++){
+            if((i == IN[inIndex]) && (i2 == JA[jaIndex])){
+                checkMatrix[i*this->columns+i2]=AN[anIndex];
+                inIndex++;
+                jaIndex++;
+                anIndex++;
+            }
+        }
+    }
+    checkTwoMatrices();
+}
+
+void Matrix::checkMemory(){
+    cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
+    cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
+    cout<<"--------------------------------------"<<endl;
+    cout<<"Ilosc elementow niezerowych (double): "<<AN.size()<<endl;
+    cout<<"Ilosc wierszy (int): "<<IN.size()<<endl;
+    cout<<"Ilosc kolumn (int): "<<JA.size()<<endl;
+    cout<<"Macierz po formacie zajmuje: "<<(sizeof(double) * this->AN.size())+ (sizeof(int)*this->IN.size()) + (sizeof(int)* this->JA.size())<<" bajtow"<<endl;
+    cout<<"--------------------------------------"<<endl;
+    cout<<endl;
 }
