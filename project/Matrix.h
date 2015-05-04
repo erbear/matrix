@@ -22,11 +22,11 @@ public:
     void coatUnzip();
     void diagonalUnzip();
     void diagonalCompression();
+
     void coordinatesCompression();
     void modifiedSparseCompression();
     void coordinatesCompressionUnzip();
 
-    void readFromMtx();
     void loadMatrix(char *s);
     void checkTwoMatrices() const;
     void makeEmptyCheckMatrix();
@@ -38,4 +38,9 @@ public:
     void multiplicationCoordinatesCompression();
     void multiplicationModifiedSparseCompression();
     void checkMemory();
+
+    void readFromMtx();
+    void multiplayDiagonal();
+    void multiplayCoat();
+
 };
