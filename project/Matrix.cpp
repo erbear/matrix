@@ -338,7 +338,40 @@ void Matrix::multiplayDiagonal(){
         }
     }
     
-    for (int i = 0; i<result.size(); i++) {
-        cout << result[i] << endl;
+//    check
+//    for (int i = 0; i<result.size(); i++) {
+//        cout << result[i] << endl;
+//    }
+}
+void Matrix::multiplayCoat(){
+    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
+    result(vector.size());
+    
+    int position = 0,
+        previousRow = 0;
+    
+    for (int row = 0; row<this->compressed[1].size(); row++) {
+        int elementsToRead = this->compressed[1][row] - previousRow;
+        int col = row + 1 - elementsToRead;
+        
+        while (position<this->compressed[1][row]) {
+            
+            if (position+1==this->compressed[1][row]){
+                result[row] += vector[col] * this->compressed[0][position];
+            }
+            else {
+                result[row] += vector[col] * this->compressed[0][position];
+                result[col] += vector[row] * this->compressed[0][position];
+            }
+            col++;
+            position++;
+        }
+        previousRow = this->compressed[1][row];
     }
+    
+//    check
+//    for (int i = 0; i<result.size(); i++) {
+//        cout << result[i] << endl;
+//    }
+    
 }

@@ -28,4 +28,6 @@ public:
     void checkTwoMatrices() const;
     void makeEmptyCheckMatrix();
     void readFromMtx();
+    void multiplayDiagonal();
+    void multiplayCoat();
 };
