@@ -129,7 +129,7 @@ int main(int argc, const char * argv[]) {
 
         case 2: m.diagonalCompression();
         break;
-        case 3: m.modifiedSparseCompression();
+        case 3: 
             m.modifiedSparseCompression();
             cout<<"CRS: ";
             TIMER_START
