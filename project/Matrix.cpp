@@ -268,3 +268,47 @@ void Matrix::checkTwoMatrices() const {
         cout<<"Macierze roznia sie w "<<count<<" miejscach!";
     }
 }
+
+void Matrix::readFromMtx(){
+    // Open the file:
+    ifstream plik;
+    plik.open("matrix.mtx");
+    // Declare variables:
+    int M, N, L;
+    
+    // Ignore headers and comments:
+    while (plik.peek() == '%') plik.ignore(2048, '\n');
+    
+    // Read defining parameters:
+    plik >> M >> N >> L;
+    
+//    cout << M << " " << N << " " << L << " ";
+    
+    // Create your matrix:
+    vector<int> matrix(M*N);			     // Creates a pointer to the array
+    fill(std::begin(matrix), std::end(matrix), 0); // From <algorithm>, zeros all entries.
+    
+    // Read the data
+    for (int l = 0; l < L; l++)
+    {
+        int m, n;
+        int data;
+        plik >> m >> n >> data;
+        matrix[(m-1) + (n-1)*M] = data;
+    }
+    
+    plik.close();
+    
+//    check
+//    for (int i = 1; i<M*N+1; i++) {
+//        cout << matrix[i-1]<< " ";
+//        if (i%M == 0)
+//            cout << endl;
+//    }
+    
+    this->columns = M;
+    this->rows = N;
+    this->matrix = matrix;
+    
+    
+}

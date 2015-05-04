@@ -27,4 +27,5 @@ public:
     void modifiedSparseCompression();
     void checkTwoMatrices() const;
     void makeEmptyCheckMatrix();
+    void readFromMtx();
 };
