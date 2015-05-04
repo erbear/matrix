@@ -28,7 +28,7 @@ void Matrix::loadMatrix(char * s) {
     while (true){
         numberInRow++;
         plik >> number;
-
+        
         if (plik.good()){
             this->matrix.push_back(number);
         }
@@ -111,6 +111,7 @@ void Matrix::diagonalCompression()
 //        cout << endl;
 //    }
 }
+
 void Matrix::diagonalUnzip(){
     this->checkMatrix.clear();
     this->rows = static_cast<int>(this->compressed.size());
@@ -311,4 +312,33 @@ void Matrix::readFromMtx(){
     this->matrix = matrix;
     
     
+}
+
+void Matrix::multiplayDiagonal(){
+    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
+                result(vector.size());
+    
+//    fill(std::begin(result), std::end(result), 0);
+    
+    for (int row = 0; row<this->rows; row++) {
+        int positionInMatrix = row,
+            numberOfColumns = this->compressed[0].size() - 1;
+        
+        for (int column = numberOfColumns; column>=0; column--) {
+            if (positionInMatrix>=0){
+                if (column<numberOfColumns){
+                    result[row] += vector[positionInMatrix] * this->compressed[row][column];
+                    result[positionInMatrix] += vector[row] * this->compressed[row][column];
+                }
+                else {
+                    result[row] += result[row] + vector[positionInMatrix] * this->compressed[row][column];
+                }
+                positionInMatrix--;
+            }
+        }
+    }
+    
+    for (int i = 0; i<result.size(); i++) {
+        cout << result[i] << endl;
+    }
 }
