@@ -268,6 +268,7 @@ void Matrix::saveVector(char * s, vector <double> &v) const{
 }
 
 void Matrix::multiplicationCoordinatesCompression(){
+    this->vecResult.clear();
     for (int i = 0; i < this->rows; i++ ) {
         vecResult.push_back(0.0);
     }
@@ -449,5 +450,15 @@ void Matrix::multiplayCoat(){
 //    }
 //
 
+}
+
+void Matrix::coatSize(){
+    cout << "Macierz skompresowana metoda powłokową waży: ";
+    cout << (sizeof(double) * this->AN.size())+ (sizeof(int)*this->JA.size()) << "Bajtów" <<endl;
+}
+
+void Matrix::diagonalSize(){
+    cout << "Macierz skompresowana metoda diagonalna waży: ";
+    cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << "Bajtów" <<endl;
 }
 

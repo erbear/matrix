@@ -20,8 +20,11 @@ public:
 
     void coatCompression();
     void coatUnzip();
+    void coatSize();
+    
     void diagonalUnzip();
     void diagonalCompression();
+    void diagonalSize();
 
     void coordinatesCompression();
     void modifiedSparseCompression();

@@ -107,6 +107,7 @@ int main(int argc, const char * argv[]) {
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
                 std::cout << "Time difference = " << time <<std::endl;
+                m.coatSize();
                 break;
             }
             case 2:
@@ -117,6 +118,7 @@ int main(int argc, const char * argv[]) {
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
                 std::cout << "Time difference = " << time <<std::endl;
+                m.diagonalSize();
                 break;
             }
             case 3:{
