@@ -17,7 +17,8 @@ class Matrix {
 
 public:
     Matrix(){};
-
+    void matrixDetails();
+    
     void coatCompression();
     void coatUnzip();
     void coatSize();

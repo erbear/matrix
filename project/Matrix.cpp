@@ -462,3 +462,8 @@ void Matrix::diagonalSize(){
     cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << "Bajtów" <<endl;
 }
 
+void Matrix::matrixDetails(){
+    cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
+    cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
+}
+

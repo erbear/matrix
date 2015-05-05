@@ -101,43 +101,55 @@ int main(int argc, const char * argv[]) {
         switch(n){
             case 1:
             {
+                cout << "Metoda Diagonalna"<<endl;
                 m.coatCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplayCoat();
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                
+                m.matrixDetails();
+                
                 std::cout << "Time difference = " << time <<std::endl;
                 m.coatSize();
                 break;
             }
             case 2:
             {
+                cout<<"2. Metoda Powlokowa"<<endl;
                 m.diagonalCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplayDiagonal();
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                
+                m.matrixDetails();
+
                 std::cout << "Time difference = " << time <<std::endl;
                 m.diagonalSize();
                 break;
             }
             case 3:{
+                cout<<"3. Metoda Rozrzedzona wierszowa"<<endl;
                 m.modifiedSparseCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplicationModifiedSparseCompression();
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
                 std::cout << "Time difference = " << time <<std::endl;
+                m.checkMemory();
                 break;
                 
             }
             case 4:{
+                cout<<"4. Metoda Współrzędnych"<<endl;
                 m.coordinatesCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplicationCoordinatesCompression();
                 std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
                 int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
                 std::cout << "Time difference = " << time <<std::endl;
+                m.checkMemory();
                 break;
             }
             case 5:
