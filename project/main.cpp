@@ -127,7 +127,15 @@ int main(int argc, const char * argv[]) {
             m.checkMemory();
         break;
 
-        case 2: m.diagonalCompression();
+        case 2:
+            m.diagonalCompression();
+            cout<<"CRS: ";
+            TIMER_START
+            for(int i = 0; i < 100; i++)
+                m.multiplayDiagonal();
+            TIMER_STOP
+            
+            m.checkMemory();
         break;
         case 3: 
             m.modifiedSparseCompression();
@@ -139,7 +147,15 @@ int main(int argc, const char * argv[]) {
 
             m.checkMemory();
         break;
-        case 4: m.coatCompression();
+        case 4:
+            m.coatCompression();
+            cout<<"CRS: ";
+            TIMER_START
+            for(int i = 0; i < 100; i++)
+                m.multiplayCoat();
+            TIMER_STOP
+            
+            m.checkMemory();
         break;
         default:
             m.coordinatesCompression();
