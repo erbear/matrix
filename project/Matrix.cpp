@@ -342,10 +342,10 @@ void Matrix::checkMemory(){
 }
 
 
-void Matrix::readFromMtx(){
+void Matrix::readFromMtx(char * s){
     // Open the file:
     ifstream plik;
-    plik.open("matrix.mtx");
+    plik.open(s);
     // Declare variables:
     int M, N, L;
 

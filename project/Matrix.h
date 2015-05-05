@@ -41,5 +41,5 @@ public:
 
     void multiplayDiagonal();
     void multiplayCoat();
-    void readFromMtx();
+    void readFromMtx(char * s);
 };
