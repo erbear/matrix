@@ -1,19 +1,6 @@
 #include <iostream>
 #include "Matrix.h"
-#include <windows.h>
-
-#define TIMER_INIT \
-    LARGE_INTEGER frequency; \
-    LARGE_INTEGER t1,t2; \
-    double elapsedTime; \
-    QueryPerformanceFrequency(&frequency);
-
-#define TIMER_START QueryPerformanceCounter(&t1);
-
-#define TIMER_STOP \
-    QueryPerformanceCounter(&t2); \
-    elapsedTime=(float)(t2.QuadPart-t1.QuadPart)/frequency.QuadPart; \
-    std::wcout<<elapsedTime/100<<L" sekund"<<endl;
+#include <chrono>
 
 using namespace std;
 
@@ -32,10 +19,10 @@ char * Menu()
     switch(n)
     {
     case 1:
-        st = "matrix.txt";
+        st = "bcsstk27.mtx";
         break;
     case 2:
-        st = "matrix2.txt";
+        st = "bcsstk28.mtx";
         break;
     case 3:
         st = "matrix3.txt";
@@ -79,16 +66,13 @@ char * menuVector()
 
 int main(int argc, const char * argv[]) {
 
-    TIMER_INIT;
     int n = 0, k = 0;
     char * st = Menu();
     char * vt;
     char * vt2;
     Matrix m;
 
-    m.loadMatrix(st);
-
-    //m.readFromMtx();
+    m.readFromMtx(st);
 
     cout<<"Wybierz wektor do mnozenia"<<endl;
         cout<<"1. Wygeneruj nowy wektor"<<endl;
@@ -107,65 +91,54 @@ int main(int argc, const char * argv[]) {
             m.generateNewVector();
         break;
     }
-
-    cout<<"\nWybierz metode do formatowania"<<endl;
-        cout<<"1. Metoda Wspolrzednych"<<endl;
-        cout<<"2. Metoda Diagonalna"<<endl;
+        cout<<"\nWybierz metode do formatowania"<<endl;
+        cout<<"1. Metoda Diagonalna"<<endl;
+        cout<<"2. Metoda Powlokowa"<<endl;
         cout<<"3. Metoda Rozrzedzona wierszowa"<<endl;
-        cout<<"4. Metoda Powlokowa"<<endl;
-    cin>>n;
-
-    switch(n){
-        case 1:
-            m.coordinatesCompression();
-            cout<<"COO: ";
-            TIMER_START
-            for(int i = 0; i < 100; i++)
-                m.multiplicationCoordinatesCompression();
-            TIMER_STOP
-
-            m.checkMemory();
-        break;
-
-        case 2:
-            m.diagonalCompression();
-            cout<<"CRS: ";
-            TIMER_START
-            for(int i = 0; i < 100; i++)
-                m.multiplayDiagonal();
-            TIMER_STOP
-            
-            m.checkMemory();
-        break;
-        case 3: 
-            m.modifiedSparseCompression();
-            cout<<"CRS: ";
-            TIMER_START
-            for(int i = 0; i < 100; i++)
-                m.multiplicationModifiedSparseCompression();
-            TIMER_STOP
-
-            m.checkMemory();
-        break;
-        case 4:
-            m.coatCompression();
-            cout<<"CRS: ";
-            TIMER_START
-            for(int i = 0; i < 100; i++)
+        cout<<"4. Metoda Współrzędnych"<<endl;
+        cout<<"5. Wyjscie"<<endl;
+        cin>>n;
+        switch(n){
+            case 1:
+            {
+                m.coatCompression();
+                std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplayCoat();
-            TIMER_STOP
-            
-            m.checkMemory();
-        break;
-        default:
-            m.coordinatesCompression();
-            cout<<"COO: ";
-            TIMER_START
-            for(int i = 0; i < 100; i++)
+                std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
+                int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                std::cout << "Time difference = " << time <<std::endl;
+                break;
+            }
+            case 2:
+            {
+                m.diagonalCompression();
+                std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+                m.multiplayDiagonal();
+                std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
+                int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                std::cout << "Time difference = " << time <<std::endl;
+                break;
+            }
+            case 3:{
+                m.modifiedSparseCompression();
+                std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+                m.multiplicationModifiedSparseCompression();
+                std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
+                int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                std::cout << "Time difference = " << time <<std::endl;
+                break;
+                
+            }
+            case 4:{
+                m.coordinatesCompression();
+                std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplicationCoordinatesCompression();
-            TIMER_STOP
-
-            m.checkMemory();
-        break;
-    }
+                std::chrono::steady_clock::time_point end= std::chrono::steady_clock::now();
+                int time = chrono::duration_cast<chrono::nanoseconds> (end - begin).count();
+                std::cout << "Time difference = " << time <<std::endl;
+                break;
+            }
+            case 5:
+                break;
+        }
 }
