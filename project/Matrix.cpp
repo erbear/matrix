@@ -387,36 +387,36 @@ void Matrix::readFromMtx(char * s){
 
 
 }
-//
-//void Matrix::multiplayDiagonal(){
-//    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-//                result(vector.size());
-//
-////    fill(std::begin(result), std::end(result), 0);
-//
-//    for (int row = 0; row<this->rows; row++) {
-//        int positionInMatrix = row,
-//            numberOfColumns = this->compressed[0].size() - 1;
-//
-//        for (int column = numberOfColumns; column>=0; column--) {
-//            if (positionInMatrix>=0){
-//                if (column<numberOfColumns){
-//                    result[row] += vector[positionInMatrix] * this->compressed[row][column];
-//                    result[positionInMatrix] += vector[row] * this->compressed[row][column];
-//                }
-//                else {
-//                    result[row] += result[row] + vector[positionInMatrix] * this->compressed[row][column];
-//                }
-//                positionInMatrix--;
-//            }
-//        }
+
+void Matrix::multiplayDiagonal(){
+    vector<double> result(this->vec.size());
+    this->vecResult = result;
+
+//    fill(std::begin(result), std::end(result), 0);
+
+    for (int row = 0; row<this->rows; row++) {
+        int positionInMatrix = row,
+            numberOfColumns = this->compressed[0].size() - 1;
+
+        for (int column = numberOfColumns; column>=0; column--) {
+            if (positionInMatrix>=0){
+                if (column<numberOfColumns){
+                    this->vecResult[row] += this->vec[positionInMatrix] * this->compressed[row][column];
+                    this->vecResult[positionInMatrix] += this->vec[row] * this->compressed[row][column];
+                }
+                else {
+                    this->vecResult[row] += this->vec[positionInMatrix] * this->compressed[row][column];
+                }
+                positionInMatrix--;
+            }
+        }
+    }
+
+//    check
+//    for (int i = 0; i<this->vecResult.size(); i++) {
+//        cout << this->vecResult[i] << endl;
 //    }
-//
-////    check
-////    for (int i = 0; i<result.size(); i++) {
-////        cout << result[i] << endl;
-////    }
-//}
+}
 //void Matrix::multiplayCoat(){
 //    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
 //    result(vector.size());
