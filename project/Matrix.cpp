@@ -46,7 +46,8 @@ void Matrix::loadMatrix(char * s) {
 
 void Matrix::coatCompression()
 {
-    vector<int> an, ia;
+    AN.clear();
+    JA.clear();
 
     for (int i = 0; i<this->rows; i++)
     {
@@ -56,23 +57,20 @@ void Matrix::coatCompression()
         for (int i2=0; i2<i+1; i2++){
             if (this->matrix[i*this->columns+i2] != 0 || startReading == true){
                 startReading = true;
-                an.push_back(this->matrix[i*this->columns+i2]);
+                AN.push_back(this->matrix[i*this->columns+i2]);
             }
         }
-        ia.push_back(static_cast<int>(an.size()));
+        JA.push_back(static_cast<int>(AN.size()));
     }
-
-    this->compressed.push_back(an);
-    this->compressed.push_back(ia);
 
 //    check
 //
-//    for (int i=0; i<an.size(); i++) {
-//        cout << an[i] << " ";
+//    for (int i=0; i<AN.size(); i++) {
+//        cout << AN[i] << " ";
 //    }
 //    cout << endl;
-//    for (int i=0; i<ia.size(); i++) {
-//        cout << ia[i] << " ";
+//    for (int i=0; i<JA.size(); i++) {
+//        cout << JA[i] << " ";
 //    }
 }
 
@@ -155,25 +153,25 @@ void Matrix::diagonalUnzip(){
 
 void Matrix::coatUnzip(){
     this->checkMatrix.clear();
-    this->rows = static_cast<int>(this->compressed[1].size());
+    this->rows = static_cast<int>(JA.size());
     int nextStepSize = 0,
         position = 0;
     for (int i=0; i<this->rows; i++){
-        nextStepSize = this->compressed[1][i] - nextStepSize;
+        nextStepSize = JA[i] - nextStepSize;
 
         for (int i2 = 0; i2<i-nextStepSize+1; i2++) {
             this->checkMatrix.push_back(0);
         }
         for (int i2 = position; i2<position + nextStepSize; i2++){
-            this->checkMatrix.push_back(this->compressed[0][i2]);
+            this->checkMatrix.push_back(this->AN[i2]);
             int column = static_cast<int>(this->checkMatrix.size() - i * this->columns -1);
-            this->checkMatrix[this->rows*column+i] = this->compressed[0][i2];
+            this->checkMatrix[this->rows*column+i] = AN[i2];
         }
         for (int i2=0; i2<this->columns-i-1; i2++) {
             this->checkMatrix.push_back(0);
         }
         position = position + nextStepSize;
-        nextStepSize = this->compressed[1][i];
+        nextStepSize = JA[i];
     }
 
 //    for (int i = 1; i<=this->matrix.size(); i++) {
@@ -342,7 +340,7 @@ void Matrix::checkMemory(){
     cout<<endl;
 }
 
-/*
+
 void Matrix::readFromMtx(){
     // Open the file:
     ifstream plik;
@@ -359,7 +357,7 @@ void Matrix::readFromMtx(){
 //    cout << M << " " << N << " " << L << " ";
 
     // Create your matrix:
-    vector<int> matrix(M*N);
+    vector<double> matrix(M*N);
     for(int i = 0; i < M*N; i++){
         matrix.push_back(0);
     }
@@ -368,7 +366,7 @@ void Matrix::readFromMtx(){
     for (int l = 0; l < L; l++)
     {
         int m, n;
-        int data;
+        double data;
         plik >> m >> n >> data;
         matrix[(m-1) + (n-1)*M] = data;
     }
@@ -388,67 +386,67 @@ void Matrix::readFromMtx(){
 
 
 }
-
-void Matrix::multiplayDiagonal(){
-    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-                result(vector.size());
-
-//    fill(std::begin(result), std::end(result), 0);
-
-    for (int row = 0; row<this->rows; row++) {
-        int positionInMatrix = row,
-            numberOfColumns = this->compressed[0].size() - 1;
-
-        for (int column = numberOfColumns; column>=0; column--) {
-            if (positionInMatrix>=0){
-                if (column<numberOfColumns){
-                    result[row] += vector[positionInMatrix] * this->compressed[row][column];
-                    result[positionInMatrix] += vector[row] * this->compressed[row][column];
-                }
-                else {
-                    result[row] += result[row] + vector[positionInMatrix] * this->compressed[row][column];
-                }
-                positionInMatrix--;
-            }
-        }
-    }
-
-//    check
-//    for (int i = 0; i<result.size(); i++) {
-//        cout << result[i] << endl;
-//    }
-}
-void Matrix::multiplayCoat(){
-    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-    result(vector.size());
-
-    int position = 0,
-        previousRow = 0;
-
-    for (int row = 0; row<this->compressed[1].size(); row++) {
-        int elementsToRead = this->compressed[1][row] - previousRow;
-        int col = row + 1 - elementsToRead;
-
-        while (position<this->compressed[1][row]) {
-
-            if (position+1==this->compressed[1][row]){
-                result[row] += vector[col] * this->compressed[0][position];
-            }
-            else {
-                result[row] += vector[col] * this->compressed[0][position];
-                result[col] += vector[row] * this->compressed[0][position];
-            }
-            col++;
-            position++;
-        }
-        previousRow = this->compressed[1][row];
-    }
-
-//    check
-//    for (int i = 0; i<result.size(); i++) {
-//        cout << result[i] << endl;
+//
+//void Matrix::multiplayDiagonal(){
+//    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
+//                result(vector.size());
+//
+////    fill(std::begin(result), std::end(result), 0);
+//
+//    for (int row = 0; row<this->rows; row++) {
+//        int positionInMatrix = row,
+//            numberOfColumns = this->compressed[0].size() - 1;
+//
+//        for (int column = numberOfColumns; column>=0; column--) {
+//            if (positionInMatrix>=0){
+//                if (column<numberOfColumns){
+//                    result[row] += vector[positionInMatrix] * this->compressed[row][column];
+//                    result[positionInMatrix] += vector[row] * this->compressed[row][column];
+//                }
+//                else {
+//                    result[row] += result[row] + vector[positionInMatrix] * this->compressed[row][column];
+//                }
+//                positionInMatrix--;
+//            }
+//        }
 //    }
 //
-
-}
-*/
+////    check
+////    for (int i = 0; i<result.size(); i++) {
+////        cout << result[i] << endl;
+////    }
+//}
+//void Matrix::multiplayCoat(){
+//    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
+//    result(vector.size());
+//
+//    int position = 0,
+//        previousRow = 0;
+//
+//    for (int row = 0; row<this->compressed[1].size(); row++) {
+//        int elementsToRead = this->compressed[1][row] - previousRow;
+//        int col = row + 1 - elementsToRead;
+//
+//        while (position<this->compressed[1][row]) {
+//
+//            if (position+1==this->compressed[1][row]){
+//                result[row] += vector[col] * this->compressed[0][position];
+//            }
+//            else {
+//                result[row] += vector[col] * this->compressed[0][position];
+//                result[col] += vector[row] * this->compressed[0][position];
+//            }
+//            col++;
+//            position++;
+//        }
+//        previousRow = this->compressed[1][row];
+//    }
+//
+////    check
+////    for (int i = 0; i<result.size(); i++) {
+////        cout << result[i] << endl;
+////    }
+////
+//
+//}
+//
