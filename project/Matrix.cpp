@@ -77,7 +77,7 @@ void Matrix::coatCompression()
 void Matrix::diagonalCompression()
 {
     int size = 0;
-    vector<int> row;
+    vector<double> row;
     for (int i = 0; i<this->rows; i++)
     {
         int beta = 0;
@@ -133,21 +133,22 @@ void Matrix::diagonalUnzip(){
                 this->checkMatrix.push_back(this->compressed[i][i2]);
                 this->checkMatrix[this->rows*column+i] = this->compressed[i][i2];
 
+            }
         }
         //zeros on back
         for (int i2=i; i2<this->columns-1; i2++) {
             this->checkMatrix.push_back(0);
         }
+        
     }
 
 //    check
-//    for (int i = 1; i<=this->matrix.size(); i++) {
-//        cout << this->matrix[i-1];
+//    for (int i = 1; i<=this->checkMatrix.size(); i++) {
+//        cout << this->checkMatrix[i-1];
 //        cout << " ";
 //        if (i%this->rows == 0 )
 //            cout << endl;
 //    }
-}
 }
 
 

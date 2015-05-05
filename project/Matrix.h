@@ -13,7 +13,7 @@ class Matrix {
     vector <double> AN; // AN - wartosci, IN - wiersze, JA - kolumny
     vector <int> JA, IN;  // wektory na łapanie formatow kompresji
 
-    vector < vector < int > > compressed;
+    vector < vector < double > > compressed;
 
 public:
     Matrix(){};
