@@ -417,37 +417,37 @@ void Matrix::multiplayDiagonal(){
 //        cout << this->vecResult[i] << endl;
 //    }
 }
-//void Matrix::multiplayCoat(){
-//    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-//    result(vector.size());
-//
-//    int position = 0,
-//        previousRow = 0;
-//
-//    for (int row = 0; row<this->compressed[1].size(); row++) {
-//        int elementsToRead = this->compressed[1][row] - previousRow;
-//        int col = row + 1 - elementsToRead;
-//
-//        while (position<this->compressed[1][row]) {
-//
-//            if (position+1==this->compressed[1][row]){
-//                result[row] += vector[col] * this->compressed[0][position];
-//            }
-//            else {
-//                result[row] += vector[col] * this->compressed[0][position];
-//                result[col] += vector[row] * this->compressed[0][position];
-//            }
-//            col++;
-//            position++;
-//        }
-//        previousRow = this->compressed[1][row];
+void Matrix::multiplayCoat(){
+    vector<double> result(this->vec.size());
+    this->vecResult = result;
+
+    int position = 0,
+        previousRow = 0;
+
+    for (int row = 0; row<JA.size(); row++) {
+        int elementsToRead = JA[row] - previousRow;
+        int col = row + 1 - elementsToRead;
+
+        while (position<JA[row]) {
+
+            if (position+1==JA[row]){
+                this->vecResult[row] += this->vec[col] * AN[position];
+            }
+            else {
+                this->vecResult[row] += this->vec[col] * AN[position];
+                this->vecResult[col] += this->vec[row] * AN[position];
+            }
+            col++;
+            position++;
+        }
+        previousRow = JA[row];
+    }
+
+//    check
+//    for (int i = 0; i<this->vecResult.size(); i++) {
+//        cout << this->vecResult[i] << endl;
 //    }
 //
-////    check
-////    for (int i = 0; i<result.size(); i++) {
-////        cout << result[i] << endl;
-////    }
-////
-//
-//}
-//
+
+}
+
