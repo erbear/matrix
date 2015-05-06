@@ -10,6 +10,7 @@ class Matrix {
 
     vector < double > vec; // wygenerowany wektor
     vector < double > vecResult; // wektor do wyniku mnozenia
+    vector < double > vecResult2;
     vector <double> AN; // AN - wartosci, IN - wiersze, JA - kolumny
     vector <int> JA, IN;  // wektory na łapanie formatow kompresji
 
@@ -46,4 +47,7 @@ public:
     void multiplayDiagonal();
     void multiplayCoat();
     void readFromMtx(char * s);
+    
+    void multiplyMatrix();
+    void vectorsComparssion();
 };

@@ -274,7 +274,7 @@ void Matrix::multiplicationCoordinatesCompression(){
     }
 
     for (int i = 0; i < AN.size(); i++){
-        vecResult[IN[i]] += (AN[i] * vec[JA[i]])/100;
+        vecResult[IN[i]] += (AN[i] * vec[JA[i]]);
     }
 
     this->saveVector("result_vector_coo.txt", vecResult);
@@ -306,7 +306,7 @@ void Matrix::multiplicationModifiedSparseCompression(){
         vecResult.push_back(0.0);
         for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
             int j = JA[jj];
-            vecResult[i] += (AN[jj] * vec[j])/100;
+            vecResult[i] += (AN[jj] * vec[j]);
         }
     }
     this->saveVector("result_vector_crs.txt", vecResult);
@@ -467,3 +467,35 @@ void Matrix::matrixDetails(){
     cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
 }
 
+void Matrix::multiplyMatrix(){
+    this->vecResult2.clear();
+    vector<double> result(this->rows);
+    
+    this->vecResult2 = result;
+    
+    for (int row=0; row<this->rows; row++) {
+        for (int column=0; column<this->columns; column++) {
+            this->vecResult2[row] += this->matrix[row*this->columns+column] * this->vec[column];
+        }
+    }
+    
+    this->saveVector("matrixXvector.txt", result);
+}
+void Matrix::vectorsComparssion() {
+    bool isSame = true;
+    if (this->vecResult.size() != this->vecResult2.size()){
+        cout << "Rozne rozmiary wektorow";
+    }
+    
+    for (int i = 0; i<this->vecResult.size(); i++) {
+        cout <<this->vecResult[i] << " " <<this->vecResult2[i] << endl;
+        if (!(this->vecResult[i] == this->vecResult2[i])){
+            isSame = false;
+        }
+    }
+    if (isSame) {
+        cout<< "wektory sa takie same";
+    } else {
+        cout << "wektory sa rozne";
+    }
+}
