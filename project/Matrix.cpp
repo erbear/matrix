@@ -343,7 +343,7 @@ void Matrix::checkMemory(){
 }
 
 
-void Matrix::readFromMtx(char * s){
+void Matrix::readFromMtx(char * s, bool isSymetric){
     // Open the file:
     ifstream plik;
     plik.open(s);
@@ -371,6 +371,9 @@ void Matrix::readFromMtx(char * s){
         double data;
         plik >> m >> n >> data;
         matrix[(m-1) + (n-1)*M] = data;
+        if (isSymetric){
+            matrix[(n-1) + (m-1)*N] = data;
+        }
     }
 
     plik.close();
@@ -432,11 +435,11 @@ void Matrix::multiplayCoat(){
         while (position<JA[row]) {
 
             if (position+1==JA[row]){
-                this->vecResult[row] += this->vec[col] * AN[position];
+                this->vecResult[row] += (this->vec[col] * AN[position]);
             }
             else {
-                this->vecResult[row] += this->vec[col] * AN[position];
-                this->vecResult[col] += this->vec[row] * AN[position];
+                this->vecResult[row] += (this->vec[col] * AN[position]);
+                this->vecResult[col] += (this->vec[row] * AN[position]);
             }
             col++;
             position++;
@@ -473,12 +476,16 @@ void Matrix::multiplyMatrix(){
     
     this->vecResult2 = result;
     
+    bool isSymetric = true;
     for (int row=0; row<this->rows; row++) {
         for (int column=0; column<this->columns; column++) {
+            if (this->matrix[row*this->columns+column] != this->matrix[column*this->rows+row]) {
+                isSymetric = false;
+            }
             this->vecResult2[row] += this->matrix[row*this->columns+column] * this->vec[column];
         }
     }
-    
+    cout << "czy jest symetryczna: " << isSymetric << endl;
     this->saveVector("matrixXvector.txt", result);
 }
 void Matrix::vectorsComparssion() {

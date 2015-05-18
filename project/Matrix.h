@@ -46,7 +46,7 @@ public:
 
     void multiplayDiagonal();
     void multiplayCoat();
-    void readFromMtx(char * s);
+    void readFromMtx(char * s, bool = false);
     
     void multiplyMatrix();
     void vectorsComparssion();
