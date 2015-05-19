@@ -49,5 +49,10 @@ public:
     void readFromMtx(char * s, bool = false);
     
     void multiplyMatrix();
-    void vectorsComparssion();
+	void vectorsComparssion();
+
+	double* getMatrix();
+	double* getVector();
+	double* getResult();
+	int getSize();
 };

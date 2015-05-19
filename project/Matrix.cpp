@@ -506,3 +506,16 @@ void Matrix::vectorsComparssion() {
         cout << "wektory sa rozne";
     }
 }
+
+double* Matrix::getMatrix(){
+	return &this->matrix[0];
+}
+double*  Matrix::getVector(){
+	return &this->vec[0];
+}
+double*  Matrix::getResult(){
+	return &this->vecResult2[0];
+}
+int Matrix::getSize(){
+	return this->rows;
+}
