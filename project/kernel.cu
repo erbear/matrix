@@ -5,11 +5,15 @@
 
 using namespace std;
 
+
 __global__
 void multiply(double *mtx, double *vec, double *res, int N)
 {
 	for (int i = 0; i < N; i++){
-		res[blockIdx.x * blockDim.x + threadIdx.x] += mtx[(blockIdx.x * blockDim.x + threadIdx.x) * N + i] * vec[i];
+		int idx = blockIdx.x * blockDim.x + threadIdx.x;
+		if (idx < N){
+			res[idx] += mtx[idx * N + i] * vec[i];
+		}
 	}
 }
 
