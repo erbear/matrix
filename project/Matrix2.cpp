@@ -1,4 +1,4 @@
-#include "Matrix.h"
+#include "Matrix2.h"
 #include <fstream>
 #include <iostream>
 #include <vector>
@@ -8,7 +8,7 @@
 using namespace std;
 
 
-void Matrix::loadMatrix(char * s) {
+void Matrix2::loadMatrix(char * s) {
     //opening file
     ifstream plik;
 
@@ -44,7 +44,7 @@ void Matrix::loadMatrix(char * s) {
     }
 }
 
-void Matrix::coatCompression()
+void Matrix2::coatCompression()
 {
     AN.clear();
     JA.clear();
@@ -74,7 +74,7 @@ void Matrix::coatCompression()
 //    }
 }
 
-void Matrix::diagonalCompression()
+void Matrix2::diagonalCompression()
 {
     int size = 0;
     vector<double> row;
@@ -112,7 +112,7 @@ void Matrix::diagonalCompression()
 //    }
 }
 
-void Matrix::diagonalUnzip(){
+void Matrix2::diagonalUnzip(){
     this->checkMatrix.clear();
     this->rows = static_cast<int>(this->compressed.size());
     this->columns = this->rows;
@@ -152,7 +152,7 @@ void Matrix::diagonalUnzip(){
 }
 
 
-void Matrix::coatUnzip(){
+void Matrix2::coatUnzip(){
     this->checkMatrix.clear();
     this->rows = static_cast<int>(JA.size());
     int nextStepSize = 0,
@@ -185,7 +185,7 @@ void Matrix::coatUnzip(){
 }
 
 
-void Matrix::coordinatesCompression(){
+void Matrix2::coordinatesCompression(){
 
     for (int i = 0; i<this->rows; i++){
         for (int i2=0; i2<this->columns; i2++){
@@ -199,7 +199,7 @@ void Matrix::coordinatesCompression(){
     }
 }
 
-void Matrix::makeEmptyCheckMatrix(){
+void Matrix2::makeEmptyCheckMatrix(){
     checkMatrix.clear();
 
     for (int i = 0; i<this->rows * this->columns; i++){
@@ -207,7 +207,7 @@ void Matrix::makeEmptyCheckMatrix(){
     }
 }
 
-void Matrix::checkTwoMatrices() const {
+void Matrix2::checkTwoMatrices() const {
     int count = 0;
 
     for (int i = 0; i<matrix.size(); i++){
@@ -226,7 +226,7 @@ void Matrix::checkTwoMatrices() const {
 }
 
 
-void Matrix::generateNewVector(){
+void Matrix2::generateNewVector(){
     vec.clear();
     double n = 0;
     srand( time( NULL ) );
@@ -239,7 +239,7 @@ void Matrix::generateNewVector(){
     this->saveVector("new_vector.txt", vec);
 }
 
-void Matrix::readVector(char * s){ // na probe tekstowy wektor
+void Matrix2::readVector(char * s){ // na probe tekstowy wektor
     fstream plik;
     vec.clear();
     double number = 0.0;
@@ -255,7 +255,7 @@ void Matrix::readVector(char * s){ // na probe tekstowy wektor
     }
 }
 
-void Matrix::saveVector(char * s, vector <double> &v) const{
+void Matrix2::saveVector(char * s, vector <double> &v) const{
     fstream plik;
 
     plik.open( s, std::ios::out);
@@ -267,7 +267,7 @@ void Matrix::saveVector(char * s, vector <double> &v) const{
     }
 }
 
-void Matrix::multiplicationCoordinatesCompression(){
+void Matrix2::multiplicationCoordinatesCompression(){
     this->vecResult.clear();
     for (int i = 0; i < this->rows; i++ ) {
         vecResult.push_back(0.0);
@@ -280,7 +280,7 @@ void Matrix::multiplicationCoordinatesCompression(){
     this->saveVector("result_vector_coo.txt", vecResult);
 }
 
-void Matrix::modifiedSparseCompression(){
+void Matrix2::modifiedSparseCompression(){
 
     int theBiggestProblemWithCRS = 0;
 
@@ -301,7 +301,7 @@ void Matrix::modifiedSparseCompression(){
     IN[IN.size()-1]=AN.size();
 }
 
-void Matrix::multiplicationModifiedSparseCompression(){
+void Matrix2::multiplicationModifiedSparseCompression(){
     for (int i = 0; i<this->rows; i++ ){
         vecResult.push_back(0.0);
         for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
@@ -312,7 +312,7 @@ void Matrix::multiplicationModifiedSparseCompression(){
     this->saveVector("result_vector_crs.txt", vecResult);
 }
 
-void Matrix::coordinatesCompressionUnzip(){
+void Matrix2::coordinatesCompressionUnzip(){
     makeEmptyCheckMatrix();
 
     int inIndex = 0, jaIndex = 0, anIndex = 0;
@@ -330,7 +330,7 @@ void Matrix::coordinatesCompressionUnzip(){
     checkTwoMatrices();
 }
 
-void Matrix::checkMemory(){
+void Matrix2::checkMemory(){
     cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
     cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
     cout<<"--------------------------------------"<<endl;
@@ -343,7 +343,7 @@ void Matrix::checkMemory(){
 }
 
 
-void Matrix::readFromMtx(char * s, bool isSymetric){
+void Matrix2::readFromMtx(char * s, bool isSymetric){
     // Open the file:
     ifstream plik;
     plik.open(s);
@@ -392,7 +392,7 @@ void Matrix::readFromMtx(char * s, bool isSymetric){
 
 }
 
-void Matrix::multiplayDiagonal(){
+void Matrix2::multiplayDiagonal(){
     vector<double> result(this->vec.size());
     this->vecResult = result;
 
@@ -421,7 +421,7 @@ void Matrix::multiplayDiagonal(){
 //        cout << this->vecResult[i] << endl;
 //    }
 }
-void Matrix::multiplayCoat(){
+void Matrix2::multiplayCoat(){
     vector<double> result(this->vec.size());
     this->vecResult = result;
 
@@ -455,22 +455,22 @@ void Matrix::multiplayCoat(){
 
 }
 
-void Matrix::coatSize(){
+void Matrix2::coatSize(){
     cout << "Macierz skompresowana metoda powłokową waży: ";
     cout << (sizeof(double) * this->AN.size())+ (sizeof(int)*this->JA.size()) << "Bajtów" <<endl;
 }
 
-void Matrix::diagonalSize(){
+void Matrix2::diagonalSize(){
     cout << "Macierz skompresowana metoda diagonalna waży: ";
     cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << "Bajtów" <<endl;
 }
 
-void Matrix::matrixDetails(){
+void Matrix2::matrixDetails(){
     cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
     cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
 }
 
-void Matrix::multiplyMatrix(){
+void Matrix2::multiplyMatrix(){
     this->vecResult2.clear();
     vector<double> result(this->rows);
     
@@ -488,7 +488,7 @@ void Matrix::multiplyMatrix(){
     cout << "czy jest symetryczna: " << isSymetric << endl;
     this->saveVector("matrixXvector.txt", result);
 }
-void Matrix::vectorsComparssion() {
+void Matrix2::vectorsComparssion() {
     bool isSame = true;
     if (this->vecResult.size() != this->vecResult2.size()){
         cout << "Rozne rozmiary wektorow";
@@ -507,15 +507,15 @@ void Matrix::vectorsComparssion() {
     }
 }
 
-double* Matrix::getMatrix(){
+double* Matrix2::getMatrix(){
 	return &this->matrix[0];
 }
-double*  Matrix::getVector(){
+double*  Matrix2::getVector(){
 	return &this->vec[0];
 }
-double*  Matrix::getResult(){
+double*  Matrix2::getResult(){
 	return &this->vecResult2[0];
 }
-int Matrix::getSize(){
+int Matrix2::getSize(){
 	return this->rows;
 }

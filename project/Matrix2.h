@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class Matrix {
+class Matrix2 {
     int columns, rows;
     vector < double > matrix;
     vector < double > checkMatrix;
@@ -17,7 +17,7 @@ class Matrix {
     vector < vector < double > > compressed;
 
 public:
-    Matrix(){};
+    Matrix2(){};
     void matrixDetails();
     
     void coatCompression();

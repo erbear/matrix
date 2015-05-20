@@ -1,6 +1,7 @@
 #include <iostream>
-#include "Matrix.h"
+#include "Matrix2.h"
 #include <chrono>
+#include "Vector.h"
 
 using namespace std;
 
@@ -25,10 +26,10 @@ char * Menu()
         st = "bcsstk28.mtx";
         break;
     case 3:
-        st = "matrix3.txt";
+        st = "bcsstm13.mtx";
         break;
     case 4:
-        st = "matrix4.txt";
+        st = "dwt___59.mtx";
         break;
     case 5:
         st = "matrix5.txt";
@@ -65,12 +66,28 @@ char * menuVector()
 
 
 int main(int argc, const char * argv[]) {
+    Vector v;
+    v.generate(20);
+    v.save("przyklad.txt");
+    v.read("przyklad.txt");
+    v.save("przyklad2.txt");
+//    Matrix2 m;
+//    m.readFromMtx("bcsstk27.mtx", true);
+////    m.loadMatrix("matrix2.txt");
+//    m.generateNewVector();
+//    m.multiplyMatrix();
+//
+//    m.diagonalCompression();
+//    m.multiplayDiagonal();
+//    m.vectorsComparssion();
+    
+    /*
 
     int n = 0, k = 0;
     char * st = Menu();
     char * vt;
     char * vt2;
-    Matrix m;
+    Matrix2 m;
 
     m.readFromMtx(st);
 
@@ -101,7 +118,7 @@ int main(int argc, const char * argv[]) {
         switch(n){
             case 1:
             {
-                cout << "Metoda Diagonalna"<<endl;
+                cout << "Metoda Powlokowa"<<endl;
                 m.coatCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplayCoat();
@@ -116,7 +133,7 @@ int main(int argc, const char * argv[]) {
             }
             case 2:
             {
-                cout<<"2. Metoda Powlokowa"<<endl;
+                cout<<"2. Metoda diagonalna"<<endl;
                 m.diagonalCompression();
                 std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
                 m.multiplayDiagonal();
@@ -155,4 +172,5 @@ int main(int argc, const char * argv[]) {
             case 5:
                 break;
         }
+     */
 }
