@@ -2,6 +2,7 @@
 #include "Matrix2.h"
 #include <chrono>
 #include "Vector.h"
+#include "Matrix.h"
 
 using namespace std;
 
@@ -71,6 +72,9 @@ int main(int argc, const char * argv[]) {
     v.save("przyklad.txt");
     v.read("przyklad.txt");
     v.save("przyklad2.txt");
+    Matrix m;
+    m.generate(40);
+    m.save("przykladMatrixa.txt");
 //    Matrix2 m;
 //    m.readFromMtx("bcsstk27.mtx", true);
 ////    m.loadMatrix("matrix2.txt");

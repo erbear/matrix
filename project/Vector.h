@@ -10,9 +10,13 @@
 #include <vector>
 #include <iostream>
 
+#ifndef __project__Vector__
+#define __project__Vector
+
 using namespace std;
 
 class Vector {
+public:
     vector<double> vector;
     
 public:
@@ -21,3 +25,6 @@ public:
     void read(char *s);
     void get();
 };
+
+
+#endif /* defined(__project__Vector__) */
