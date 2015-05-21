@@ -3,6 +3,7 @@
 #include <chrono>
 #include "Vector.h"
 #include "Matrix.h"
+#include "DiagonalMatrix.h"
 
 using namespace std;
 
@@ -67,14 +68,17 @@ char * menuVector()
 
 
 int main(int argc, const char * argv[]) {
-    Vector v;
-    v.generate(20);
-    v.save("przyklad.txt");
-    v.read("przyklad.txt");
-    v.save("przyklad2.txt");
-    Matrix m;
-    m.generate(40);
-    m.save("przykladMatrixa.txt");
+    Vector v(7);
+    v.generate();
+    v.read("vec.txt");
+    Matrix m(0, 0);
+    m.read("matrix.txt");
+    Vector result = m.multiplyBy(v);
+    result.save("result.txt");
+    DiagonalMatrix d(m);
+    Vector result2 = d.multiplyBy(v);
+    result2.save("result2.txt");
+    
 //    Matrix2 m;
 //    m.readFromMtx("bcsstk27.mtx", true);
 ////    m.loadMatrix("matrix2.txt");
