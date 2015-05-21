@@ -7,7 +7,14 @@
 //
 
 #include "DiagonalMatrix.h"
+#include "Vector.h"
 #include <vector>
+DiagonalMatrix::DiagonalMatrix(Matrix m)
+:Matrix(0,0)
+{
+    this->compress(m);
+}
+
 void DiagonalMatrix::compress(Matrix &matrix){
     int size = 0;
     std::vector<int> rowsSize;
@@ -39,4 +46,28 @@ void DiagonalMatrix::compress(Matrix &matrix){
     }
     this->columns = size + 1;
     this->rows = rowsSize.size();
+}
+
+Vector DiagonalMatrix::multiplyBy(Vector &v){
+    Vector result(this->rows);
+    
+    for (int row = 0; row<this->rows; row++) {
+        int positionInMatrix = row,
+        numberOfColumns = this->columns - 1;
+        
+        for (int column = numberOfColumns; column>=0; column--) {
+            if (positionInMatrix>=0){
+                if (column<numberOfColumns){
+                    result.vector[row] += v.vector[positionInMatrix] * this->vector[row*this->columns + column];
+                    result.vector[positionInMatrix] += v.vector[row] * this->vector[row*this->columns + column];
+                }
+                else {
+                    result.vector[row] += v.vector[positionInMatrix] * this->vector[row*this->columns + column];
+                }
+                positionInMatrix--;
+            }
+        }
+    }
+
+    return result;
 }

@@ -11,18 +11,16 @@
 
 #include <stdio.h>
 #include "Matrix.h"
+#include "Vector.h"
 
 class DiagonalMatrix
 : public Matrix
 {
 public:
-    DiagonalMatrix(Matrix m)
-    :Matrix(0,0)
-    {
-        this->compress(m);
-    }
+    DiagonalMatrix(Matrix);
     
     void compress(Matrix&);
+    Vector multiplyBy(Vector&);
     
 };
 

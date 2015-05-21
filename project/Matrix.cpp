@@ -77,6 +77,5 @@ Vector Matrix::multiplyBy(Vector &v){
             result.vector[row] += this->vector[row*this->columns+column] * v.vector[column];
         }
     }
-    
     return result;
 }
