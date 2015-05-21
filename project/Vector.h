@@ -9,20 +9,25 @@
 #include <stdio.h>
 #include <vector>
 #include <iostream>
+#include <string>
 
 #ifndef __project__Vector__
-#define __project__Vector
+#define __project__Vector__
 
 using namespace std;
 
 class Vector {
 public:
     vector<double> vector;
+    int size;
     
 public:
-    void generate(int);
+    Vector(int);
+    void generate();
     void save(char*);
     void read(char *s);
+    virtual string get_size();
+    virtual int read_size(ifstream& plik);
     void get();
 };
 
