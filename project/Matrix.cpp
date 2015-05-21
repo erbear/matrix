@@ -7,6 +7,7 @@
 //
 
 #include "Matrix.h"
+#include "Vector.h"
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -23,6 +24,7 @@ string Matrix::get_size(){
     size = to_string(this->rows) + " " + to_string(this->columns);
     return size;
 }
+
 
 int Matrix::read_size(ifstream &plik){
     plik >> this->rows >> this->columns;
@@ -65,7 +67,16 @@ void Matrix::read_mtx(char *name){
     this->columns = M;
     this->rows = N;
     this->vector = matrix;
+}
+
+Vector Matrix::multiplyBy(Vector &v){
+    Vector result(this->rows);
     
-
-
+    for (int row=0; row<this->rows; row++) {
+        for (int column=0; column<this->columns; column++) {
+            result.vector[row] += this->vector[row*this->columns+column] * v.vector[column];
+        }
+    }
+    
+    return result;
 }

@@ -15,6 +15,8 @@ using namespace std;
 
 Vector::Vector(int size){
     this->size = size;
+    this->vector.resize(size);
+    fill(this->vector.begin(), this->vector.end(), 0);
 }
 
 string Vector::get_size(){

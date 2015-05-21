@@ -22,7 +22,7 @@ public:
         this->compress(m);
     }
     
-    void compress(Matrix);
+    void compress(Matrix&);
     
 };
 

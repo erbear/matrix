@@ -23,9 +23,11 @@ public:
     int rows, columns;
 public:
     Matrix(int r, int c);
+    
     string get_size();
     int read_size(ifstream&);
     void read_mtx(char*);
     
+    Vector multiplyBy(Vector &v);
 };
 #endif /* defined(__project__Matrix__) */

@@ -8,7 +8,7 @@
 
 #include "DiagonalMatrix.h"
 #include <vector>
-void DiagonalMatrix::compress(Matrix matrix){
+void DiagonalMatrix::compress(Matrix &matrix){
     int size = 0;
     std::vector<int> rowsSize;
     for (int i = 0; i<matrix.rows; i++)
