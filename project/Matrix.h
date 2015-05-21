@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <string>
 #include "Vector.h"
+#include <vector>
 
 using namespace std;
 
@@ -24,6 +25,7 @@ public:
     Matrix(int r, int c);
     string get_size();
     int read_size(ifstream&);
+    void read_mtx(char*);
     
 };
 #endif /* defined(__project__Matrix__) */
