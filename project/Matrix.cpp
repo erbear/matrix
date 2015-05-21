@@ -24,6 +24,11 @@ string Matrix::get_size(){
     return size;
 }
 
+int Matrix::read_size(ifstream &plik){
+    plik >> this->rows >> this->columns;
+    return this->rows * this->columns;
+}
+
 void Matrix::read_mtx(char *name){
     // Open the file:
     ifstream plik;
@@ -63,10 +68,4 @@ void Matrix::read_mtx(char *name){
     
 
 
-}
-
-int Matrix::read_size(ifstream &plik){
-    int rws, cols;
-    plik >> rws >> cols;
-    return rws * cols;
 }
