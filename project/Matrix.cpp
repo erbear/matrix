@@ -46,7 +46,8 @@ void Matrix::loadMatrix(char * s) {
 
 void Matrix::coatCompression()
 {
-    vector<int> an, ia;
+    AN.clear();
+    JA.clear();
 
     for (int i = 0; i<this->rows; i++)
     {
@@ -56,30 +57,27 @@ void Matrix::coatCompression()
         for (int i2=0; i2<i+1; i2++){
             if (this->matrix[i*this->columns+i2] != 0 || startReading == true){
                 startReading = true;
-                an.push_back(this->matrix[i*this->columns+i2]);
+                AN.push_back(this->matrix[i*this->columns+i2]);
             }
         }
-        ia.push_back(static_cast<int>(an.size()));
+        JA.push_back(static_cast<int>(AN.size()));
     }
-
-    this->compressed.push_back(an);
-    this->compressed.push_back(ia);
 
 //    check
 //
-//    for (int i=0; i<an.size(); i++) {
-//        cout << an[i] << " ";
+//    for (int i=0; i<AN.size(); i++) {
+//        cout << AN[i] << " ";
 //    }
 //    cout << endl;
-//    for (int i=0; i<ia.size(); i++) {
-//        cout << ia[i] << " ";
+//    for (int i=0; i<JA.size(); i++) {
+//        cout << JA[i] << " ";
 //    }
 }
 
 void Matrix::diagonalCompression()
 {
     int size = 0;
-    vector<int> row;
+    vector<double> row;
     for (int i = 0; i<this->rows; i++)
     {
         int beta = 0;
@@ -135,45 +133,46 @@ void Matrix::diagonalUnzip(){
                 this->checkMatrix.push_back(this->compressed[i][i2]);
                 this->checkMatrix[this->rows*column+i] = this->compressed[i][i2];
 
+            }
         }
         //zeros on back
         for (int i2=i; i2<this->columns-1; i2++) {
             this->checkMatrix.push_back(0);
         }
+        
     }
 
 //    check
-//    for (int i = 1; i<=this->matrix.size(); i++) {
-//        cout << this->matrix[i-1];
+//    for (int i = 1; i<=this->checkMatrix.size(); i++) {
+//        cout << this->checkMatrix[i-1];
 //        cout << " ";
 //        if (i%this->rows == 0 )
 //            cout << endl;
 //    }
 }
-}
 
 
 void Matrix::coatUnzip(){
     this->checkMatrix.clear();
-    this->rows = static_cast<int>(this->compressed[1].size());
+    this->rows = static_cast<int>(JA.size());
     int nextStepSize = 0,
         position = 0;
     for (int i=0; i<this->rows; i++){
-        nextStepSize = this->compressed[1][i] - nextStepSize;
+        nextStepSize = JA[i] - nextStepSize;
 
         for (int i2 = 0; i2<i-nextStepSize+1; i2++) {
             this->checkMatrix.push_back(0);
         }
         for (int i2 = position; i2<position + nextStepSize; i2++){
-            this->checkMatrix.push_back(this->compressed[0][i2]);
+            this->checkMatrix.push_back(this->AN[i2]);
             int column = static_cast<int>(this->checkMatrix.size() - i * this->columns -1);
-            this->checkMatrix[this->rows*column+i] = this->compressed[0][i2];
+            this->checkMatrix[this->rows*column+i] = AN[i2];
         }
         for (int i2=0; i2<this->columns-i-1; i2++) {
             this->checkMatrix.push_back(0);
         }
         position = position + nextStepSize;
-        nextStepSize = this->compressed[1][i];
+        nextStepSize = JA[i];
     }
 
 //    for (int i = 1; i<=this->matrix.size(); i++) {
@@ -269,12 +268,13 @@ void Matrix::saveVector(char * s, vector <double> &v) const{
 }
 
 void Matrix::multiplicationCoordinatesCompression(){
+    this->vecResult.clear();
     for (int i = 0; i < this->rows; i++ ) {
         vecResult.push_back(0.0);
     }
 
     for (int i = 0; i < AN.size(); i++){
-        vecResult[IN[i]] += (AN[i] * vec[JA[i]])/100;
+        vecResult[IN[i]] += (AN[i] * vec[JA[i]]);
     }
 
     this->saveVector("result_vector_coo.txt", vecResult);
@@ -306,7 +306,7 @@ void Matrix::multiplicationModifiedSparseCompression(){
         vecResult.push_back(0.0);
         for (int jj = IN[i]; jj < IN[i+1]; jj++ ) {
             int j = JA[jj];
-            vecResult[i] += (AN[jj] * vec[j])/100;
+            vecResult[i] += (AN[jj] * vec[j]);
         }
     }
     this->saveVector("result_vector_crs.txt", vecResult);
@@ -342,11 +342,11 @@ void Matrix::checkMemory(){
     cout<<endl;
 }
 
-/*
-void Matrix::readFromMtx(){
+
+void Matrix::readFromMtx(char * s, bool isSymetric){
     // Open the file:
     ifstream plik;
-    plik.open("matrix.mtx");
+    plik.open(s);
     // Declare variables:
     int M, N, L;
 
@@ -359,7 +359,7 @@ void Matrix::readFromMtx(){
 //    cout << M << " " << N << " " << L << " ";
 
     // Create your matrix:
-    vector<int> matrix(M*N);
+    vector<double> matrix(M*N);
     for(int i = 0; i < M*N; i++){
         matrix.push_back(0);
     }
@@ -368,9 +368,12 @@ void Matrix::readFromMtx(){
     for (int l = 0; l < L; l++)
     {
         int m, n;
-        int data;
+        double data;
         plik >> m >> n >> data;
         matrix[(m-1) + (n-1)*M] = data;
+        if (isSymetric){
+            matrix[(n-1) + (m-1)*N] = data;
+        }
     }
 
     plik.close();
@@ -390,8 +393,8 @@ void Matrix::readFromMtx(){
 }
 
 void Matrix::multiplayDiagonal(){
-    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-                result(vector.size());
+    vector<double> result(this->vec.size());
+    this->vecResult = result;
 
 //    fill(std::begin(result), std::end(result), 0);
 
@@ -402,11 +405,11 @@ void Matrix::multiplayDiagonal(){
         for (int column = numberOfColumns; column>=0; column--) {
             if (positionInMatrix>=0){
                 if (column<numberOfColumns){
-                    result[row] += vector[positionInMatrix] * this->compressed[row][column];
-                    result[positionInMatrix] += vector[row] * this->compressed[row][column];
+                    this->vecResult[row] += this->vec[positionInMatrix] * this->compressed[row][column];
+                    this->vecResult[positionInMatrix] += this->vec[row] * this->compressed[row][column];
                 }
                 else {
-                    result[row] += result[row] + vector[positionInMatrix] * this->compressed[row][column];
+                    this->vecResult[row] += this->vec[positionInMatrix] * this->compressed[row][column];
                 }
                 positionInMatrix--;
             }
@@ -414,41 +417,132 @@ void Matrix::multiplayDiagonal(){
     }
 
 //    check
-//    for (int i = 0; i<result.size(); i++) {
-//        cout << result[i] << endl;
+//    for (int i = 0; i<this->vecResult.size(); i++) {
+//        cout << this->vecResult[i] << endl;
 //    }
 }
 void Matrix::multiplayCoat(){
-    vector<int> vector = {4, 5, 1, 2, 4, 6, 0},
-    result(vector.size());
+    vector<double> result(this->vec.size());
+    this->vecResult = result;
 
     int position = 0,
         previousRow = 0;
 
-    for (int row = 0; row<this->compressed[1].size(); row++) {
-        int elementsToRead = this->compressed[1][row] - previousRow;
+    for (int row = 0; row<JA.size(); row++) {
+        int elementsToRead = JA[row] - previousRow;
         int col = row + 1 - elementsToRead;
 
-        while (position<this->compressed[1][row]) {
+        while (position<JA[row]) {
 
-            if (position+1==this->compressed[1][row]){
-                result[row] += vector[col] * this->compressed[0][position];
+            if (position+1==JA[row]){
+                this->vecResult[row] += (this->vec[col] * AN[position]);
             }
             else {
-                result[row] += vector[col] * this->compressed[0][position];
-                result[col] += vector[row] * this->compressed[0][position];
+                this->vecResult[row] += (this->vec[col] * AN[position]);
+                this->vecResult[col] += (this->vec[row] * AN[position]);
             }
             col++;
             position++;
         }
-        previousRow = this->compressed[1][row];
+        previousRow = JA[row];
     }
 
 //    check
-//    for (int i = 0; i<result.size(); i++) {
-//        cout << result[i] << endl;
+//    for (int i = 0; i<this->vecResult.size(); i++) {
+//        cout << this->vecResult[i] << endl;
 //    }
 //
 
 }
-*/
+
+void Matrix::coatSize(){
+    cout << "Macierz skompresowana metoda pow³okow¹ wa¿y: ";
+    cout << (sizeof(double) * this->AN.size())+ (sizeof(int)*this->JA.size()) << "Bajtów" <<endl;
+}
+
+void Matrix::diagonalSize(){
+    cout << "Macierz skompresowana metoda diagonalna wa¿y: ";
+    cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << "Bajtów" <<endl;
+}
+
+void Matrix::matrixDetails(){
+    cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
+    cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
+}
+
+void Matrix::multiplyMatrix(){
+    this->vecResult2.clear();
+    vector<double> result(this->rows);
+    
+    this->vecResult2 = result;
+    
+    bool isSymetric = true;
+    for (int row=0; row<this->rows; row++) {
+        for (int column=0; column<this->columns; column++) {
+            if (this->matrix[row*this->columns+column] != this->matrix[column*this->rows+row]) {
+                isSymetric = false;
+            }
+            this->vecResult2[row] += this->matrix[row*this->columns+column] * this->vec[column];
+        }
+    }
+    cout << "czy jest symetryczna: " << isSymetric << endl;
+    this->saveVector("matrixXvector.txt", result);
+}
+void Matrix::vectorsComparssion() {
+    bool isSame = true;
+    if (this->vecResult.size() != this->vecResult2.size()){
+        cout << "Rozne rozmiary wektorow";
+    }
+    
+    for (int i = 0; i<this->vecResult.size(); i++) {
+        cout <<this->vecResult[i] << " " <<this->vecResult2[i] << endl;
+        if (!(this->vecResult[i] == this->vecResult2[i])){
+            isSame = false;
+        }
+    }
+    if (isSame) {
+        cout<< "wektory sa takie same";
+    } else {
+        cout << "wektory sa rozne";
+    }
+}
+
+double* Matrix::getMatrix(){
+	return &this->matrix[0];
+}
+double*  Matrix::getVector(){
+	return &this->vec[0];
+}
+double*  Matrix::getResult(){
+	return &this->vecResult2[0];
+}
+int Matrix::getSize(){
+	return this->rows;
+	cout<<"LSLSLLS";
+}
+
+int * Matrix::getInd(){
+	return &this->JA[0];
+}
+
+int * Matrix::getPtr() {
+	return &this->IN[0];
+}
+
+double * Matrix::getData(){
+	return &this->AN[0];
+}
+
+
+int  Matrix::getIndSize(){
+	return this->JA.size();
+}
+
+int  Matrix::getPtrSize(){
+	return this->IN.size();
+}
+
+int  Matrix::getDataSize(){
+	return this->AN.size();
+	cout<<AN.size();
+}

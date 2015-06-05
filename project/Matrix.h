@@ -10,18 +10,23 @@ class Matrix {
 
     vector < double > vec; // wygenerowany wektor
     vector < double > vecResult; // wektor do wyniku mnozenia
+    vector < double > vecResult2;
     vector <double> AN; // AN - wartosci, IN - wiersze, JA - kolumny
-    vector <int> JA, IN;  // wektory na Å‚apanie formatow kompresji
+    vector <int> JA, IN;  // wektory na ³apanie formatow kompresji
 
-    vector < vector < int > > compressed;
+    vector < vector < double > > compressed;
 
 public:
     Matrix(){};
-
+    void matrixDetails();
+    
     void coatCompression();
     void coatUnzip();
+    void coatSize();
+    
     void diagonalUnzip();
     void diagonalCompression();
+    void diagonalSize();
 
     void coordinatesCompression();
     void modifiedSparseCompression();
@@ -41,5 +46,21 @@ public:
 
     void multiplayDiagonal();
     void multiplayCoat();
-    void readFromMtx();
+    void readFromMtx(char * s, bool = false);
+    
+    void multiplyMatrix();
+	void vectorsComparssion();
+
+	double* getMatrix();
+	double* getVector();
+	double* getResult();
+
+	int * getInd();
+	int * getPtr();
+	double * getData();
+
+	int getSize();
+	int getIndSize();
+	int getPtrSize();
+	int getDataSize();
 };
