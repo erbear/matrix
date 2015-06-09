@@ -485,8 +485,8 @@ void Matrix::multiplyMatrix(){
             this->vecResult2[row] += this->matrix[row*this->columns+column] * this->vec[column];
         }
     }
-    cout << "czy jest symetryczna: " << isSymetric << endl;
-    this->saveVector("matrixXvector.txt", result);
+    //cout << "czy jest symetryczna: " << isSymetric << endl;
+    //this->saveVector("matrixXvector.txt", result);
 }
 void Matrix::vectorsComparssion() {
     bool isSame = true;
@@ -545,4 +545,21 @@ int  Matrix::getPtrSize(){
 int  Matrix::getDataSize(){
 	return this->AN.size();
 	cout<<AN.size();
+}
+
+double* Matrix::getCompressedResult(){
+	return &this->vecResult[0];
+}
+double* Matrix::getCompressedMatrix(){
+	this->compressed2.clear();
+	int columns = this->compressed[0].size();
+	for (int i = 0; i < this->compressed.size(); i++){
+		for (int i2 = 0; i2 < columns; i2++){
+			this->compressed2.push_back(this->compressed[i][i2]);
+		}
+	}
+	return &this->compressed2[0];
+}
+int Matrix::getCompressedColumnSize(){
+	return this->compressed[0].size();
 }

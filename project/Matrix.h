@@ -15,6 +15,7 @@ class Matrix {
     vector <int> JA, IN;  // wektory na ³apanie formatow kompresji
 
     vector < vector < double > > compressed;
+	vector < double > compressed2;
 
 public:
     Matrix(){};
@@ -46,7 +47,7 @@ public:
 
     void multiplayDiagonal();
     void multiplayCoat();
-    void readFromMtx(char * s, bool = false);
+    void readFromMtx(char * s, bool = true);
     
     void multiplyMatrix();
 	void vectorsComparssion();
@@ -63,4 +64,8 @@ public:
 	int getIndSize();
 	int getPtrSize();
 	int getDataSize();
+	double* getCompressedResult();
+	double* getCompressedMatrix();
+	
+	int getCompressedColumnSize();
 };

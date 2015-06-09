@@ -7,19 +7,6 @@
 
 using namespace std;
 
-#define TIMER_INIT \
-    LARGE_INTEGER frequency; \
-    LARGE_INTEGER t1,t2; \
-    double elapsedTime; \
-    QueryPerformanceFrequency(&frequency);
-
-#define TIMER_START QueryPerformanceCounter(&t1);
-
-#define TIMER_STOP \
-    QueryPerformanceCounter(&t2); \
-    elapsedTime=(float)(t2.QuadPart-t1.QuadPart)/frequency.QuadPart; \
-
-
 __global__
 void multiplyCRS(int *ptr, int *ind, double *data, double *vec, double *res, int N) {
 	int row = blockDim.x * blockIdx.x + threadIdx.x;
@@ -40,11 +27,10 @@ void multiplyCRS(int *ptr, int *ind, double *data, double *vec, double *res, int
 int main()
 {
 	Matrix m;
-	m.readFromMtx("bcsstk27.mtx");
+	m.readFromMtx("bcsstm13.mtx");
 	m.generateNewVector();
 	m.multiplyMatrix();
 	m.modifiedSparseCompression();
-	TIMER_INIT;
 
 	int block_size = 256;
 	int N = m.getSize();
@@ -97,22 +83,22 @@ int main()
 
 	// mnozenie
 	
+	cudaEvent_t start, stop;
+	float time;
 
-	 cout<<"CRS CUDA: ";
-            for(int i = 0; i < 100; i++){
-                TIMER_START
-                   multiplyCRS <<< dimGrid, dimBlock >>> (ptrd, indd, datad, vectord, resultd, N);
-                TIMER_STOP
-                check.push_back(elapsedTime);
-            }
+	cudaEventCreate(&start);
+	cudaEventCreate(&stop);
 
-            for(int i = 0; i < check.size(); i++){
-                summary+=check[i];
-            }
+	cudaEventRecord(start, 0);
+	 
+         multiplyCRS <<< dimGrid, dimBlock >>> (ptrd, indd, datad, vectord, resultd, N);
+	cudaEventRecord(stop, 0);
+	cudaEventSynchronize(stop);
 
-     
+	cudaEventElapsedTime(&time, start, stop);
 
-            cout<<summary/100<<" sekund"<<endl;
+	printf("Time difference: %f ms \n", time);
+               
 	// odsylanie
 	cudaMemcpy(result, resultd, result_size, cudaMemcpyDeviceToHost);
 
