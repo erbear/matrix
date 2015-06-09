@@ -139,7 +139,7 @@ void Matrix::diagonalUnzip(){
         for (int i2=i; i2<this->columns-1; i2++) {
             this->checkMatrix.push_back(0);
         }
-        
+
     }
 
 //    check
@@ -236,7 +236,7 @@ void Matrix::generateNewVector(){
         n =( rand() /( static_cast < double >( RAND_MAX ) + 1 ) ) *(10.5 - 5.25 ) - 1.25;
         vec.push_back(n);
     }
-    this->saveVector("new_vector.txt", vec);
+  //  this->saveVector("new_vector.txt", vec);
 }
 
 void Matrix::readVector(char * s){ // na probe tekstowy wektor
@@ -277,7 +277,7 @@ void Matrix::multiplicationCoordinatesCompression(){
         vecResult[IN[i]] += (AN[i] * vec[JA[i]]);
     }
 
-    this->saveVector("result_vector_coo.txt", vecResult);
+  // this->saveVector("result_vector_coo.txt", vecResult);
 }
 
 void Matrix::modifiedSparseCompression(){
@@ -309,7 +309,7 @@ void Matrix::multiplicationModifiedSparseCompression(){
             vecResult[i] += (AN[jj] * vec[j]);
         }
     }
-    this->saveVector("result_vector_crs.txt", vecResult);
+    //this->saveVector("result_vector_crs.txt", vecResult);
 }
 
 void Matrix::coordinatesCompressionUnzip(){
@@ -333,12 +333,7 @@ void Matrix::coordinatesCompressionUnzip(){
 void Matrix::checkMemory(){
     cout<<"Ilosc elementow macierzy: "<<matrix.size()<<endl;
     cout<<"Macierz przed formatem zajmuje: "<<sizeof(double) * this->matrix.size()<<" bajtow"<<endl;
-    cout<<"--------------------------------------"<<endl;
-    cout<<"Ilosc elementow niezerowych (double): "<<AN.size()<<endl;
-    cout<<"Ilosc wierszy (int): "<<IN.size()<<endl;
-    cout<<"Ilosc kolumn (int): "<<JA.size()<<endl;
     cout<<"Macierz po formacie zajmuje: "<<(sizeof(double) * this->AN.size())+ (sizeof(int)*this->IN.size()) + (sizeof(int)* this->JA.size())<<" bajtow"<<endl;
-    cout<<"--------------------------------------"<<endl;
     cout<<endl;
 }
 
@@ -420,6 +415,7 @@ void Matrix::multiplayDiagonal(){
 //    for (int i = 0; i<this->vecResult.size(); i++) {
 //        cout << this->vecResult[i] << endl;
 //    }
+    //this->saveVector("result_vector_diago.txt", vecResult);
 }
 void Matrix::multiplayCoat(){
     vector<double> result(this->vec.size());
@@ -452,17 +448,17 @@ void Matrix::multiplayCoat(){
 //        cout << this->vecResult[i] << endl;
 //    }
 //
-
+     //this->saveVector("result_vector_coat.txt", vecResult);
 }
 
 void Matrix::coatSize(){
-    cout << "Macierz skompresowana metoda pow³okow¹ wa¿y: ";
-    cout << (sizeof(double) * this->AN.size())+ (sizeof(int)*this->JA.size()) << "Bajtów" <<endl;
+    cout << "Macierz skompresowana metoda powlokowa wazy: ";
+    cout << (sizeof(double) * this->AN.size())+ (sizeof(int)*this->JA.size()) << " Bajtow" <<endl;
 }
 
 void Matrix::diagonalSize(){
-    cout << "Macierz skompresowana metoda diagonalna wa¿y: ";
-    cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << "Bajtów" <<endl;
+    cout << "Macierz skompresowana metoda diagonalna wazy: ";
+    cout << (sizeof(double) * this->compressed[0].size() * this->compressed.size()) << " Bajtow" <<endl;
 }
 
 void Matrix::matrixDetails(){
@@ -473,9 +469,9 @@ void Matrix::matrixDetails(){
 void Matrix::multiplyMatrix(){
     this->vecResult2.clear();
     vector<double> result(this->rows);
-    
+
     this->vecResult2 = result;
-    
+
     bool isSymetric = true;
     for (int row=0; row<this->rows; row++) {
         for (int column=0; column<this->columns; column++) {
@@ -485,15 +481,17 @@ void Matrix::multiplyMatrix(){
             this->vecResult2[row] += this->matrix[row*this->columns+column] * this->vec[column];
         }
     }
-    cout << "czy jest symetryczna: " << isSymetric << endl;
-    this->saveVector("matrixXvector.txt", result);
+
+    // this->saveVector("result_vector_normal.txt", vecResult2);
 }
+
+
 void Matrix::vectorsComparssion() {
     bool isSame = true;
     if (this->vecResult.size() != this->vecResult2.size()){
         cout << "Rozne rozmiary wektorow";
     }
-    
+
     for (int i = 0; i<this->vecResult.size(); i++) {
         cout <<this->vecResult[i] << " " <<this->vecResult2[i] << endl;
         if (!(this->vecResult[i] == this->vecResult2[i])){
@@ -518,31 +516,4 @@ double*  Matrix::getResult(){
 }
 int Matrix::getSize(){
 	return this->rows;
-	cout<<"LSLSLLS";
-}
-
-int * Matrix::getInd(){
-	return &this->JA[0];
-}
-
-int * Matrix::getPtr() {
-	return &this->IN[0];
-}
-
-double * Matrix::getData(){
-	return &this->AN[0];
-}
-
-
-int  Matrix::getIndSize(){
-	return this->JA.size();
-}
-
-int  Matrix::getPtrSize(){
-	return this->IN.size();
-}
-
-int  Matrix::getDataSize(){
-	return this->AN.size();
-	cout<<AN.size();
 }

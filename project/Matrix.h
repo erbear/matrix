@@ -12,7 +12,7 @@ class Matrix {
     vector < double > vecResult; // wektor do wyniku mnozenia
     vector < double > vecResult2;
     vector <double> AN; // AN - wartosci, IN - wiersze, JA - kolumny
-    vector <int> JA, IN;  // wektory na ³apanie formatow kompresji
+    vector <int> JA, IN;  // wektory na Å‚apanie formatow kompresji
 
     vector < vector < double > > compressed;
 
@@ -54,13 +54,5 @@ public:
 	double* getMatrix();
 	double* getVector();
 	double* getResult();
-
-	int * getInd();
-	int * getPtr();
-	double * getData();
-
 	int getSize();
-	int getIndSize();
-	int getPtrSize();
-	int getDataSize();
 };
